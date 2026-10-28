@@ -11,9 +11,11 @@ namespace ProjectCraft._Shared
         public string itemName;
         public Sprite itemIcon;
         public ItemType itemType;
+        public Rarity itemRarity;
+        public int upgradeLvl;
 
         [Header("Equipment Settings (If Equipment)")]
-        public SlotID slotID;      
+        public SlotType slotID;      
         public HandednessType handednessType; 
         public string weaponOrArmorTag;     
         public int requiredLevel = 1;

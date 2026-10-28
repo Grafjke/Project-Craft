@@ -6,13 +6,18 @@ namespace ProjectCraft._Shared
     [Serializable]
     public struct InventorySlot
     {
-        public UniversalItemData itemData; // Ссылка на ScriptableObject предмета
-        public int count;                 
+        public string itemInstanceId;
+        public UniversalItemData itemData;
+        public int count;
+        public bool isLocked;
+
 
         public InventorySlot(UniversalItemData item, int count)
         {
             this.itemData = item;
             this.count = count;
+            isLocked = false;
+            itemInstanceId = null;
         }
 
         public bool IsEmpty => itemData == null || count <= 0;

@@ -11,15 +11,14 @@ namespace ProjectCraft._Shared
     }
 
    
-    public enum SlotID
+    public enum SlotType
     {
         Head,
         Body,
         Gloves,
         Boots,
         Neck,
-        Ring1,
-        Ring2,
+        Ring,
         Main_Hand, 
         Off_Hand,  
         None
@@ -39,5 +38,12 @@ namespace ProjectCraft._Shared
         Strength,
         Intellect,
         Physical_Damage
+    }
+    public enum Rarity
+    {
+        Common,
+        Rare,
+        Epic,
+        Legendary
     }
 }
