@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24f013836763cf941b6e724cf56d08dd, type: 3}
+  m_Name: Eq_RustySword
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Shared.UniversalItemData
+  itemID: eq_rusty_sword
+  itemName: "\u0420\u0436\u0430\u0432\u044B\u0439 \u043C\u0435\u0447"
+  itemIcon: {fileID: 0}
+  itemType: 0
+  slotID: 7
+  handednessType: 0
+  weaponOrArmorTag: Sword
+  requiredLevel: 1
+  maxStackValue: 1
+  staticStatsBlueprint:
+  - statName: 4
+    baseValue: 5
+  - statName: 2
+    baseValue: 2
+  requiredMaterials:
+  - resource: {fileID: 11400000, guid: d7a9604706f2dee43abd2a7850032f17, type: 2}
+    count: 5

@@ -126,6 +126,8 @@ GameObject:
   - component: {fileID: 1851071812537839010}
   - component: {fileID: 3841082561925314589}
   - component: {fileID: 2560915760025840126}
+  - component: {fileID: -844036768831754338}
+  - component: {fileID: 2465075815719530655}
   m_Layer: 0
   m_Name: Player_Server
   m_TagString: Untagged
@@ -196,3 +198,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClientInputController
   serverMovement: {fileID: 3841082561925314589}
+  serverTarget: {fileID: 0}
+--- !u!114 &-844036768831754338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6349225289966411016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 342b5c7f9bab2424ea9e123ca3868858, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ServerPlayerEntity
+  maxHealth: 100
+  currentHealth: 100
+  strength: 10
+  intellect: 10
+  armor: 0
+  inventorySlots: []
+--- !u!114 &2465075815719530655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6349225289966411016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 342b5c7f9bab2424ea9e123ca3868858, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ServerPlayerEntity
+  maxHealth: 100
+  currentHealth: 100
+  strength: 10
+  intellect: 10
+  armor: 0
+  inventorySlots: []

@@ -347,6 +347,7 @@ GameObject:
   - component: {fileID: 1602098700}
   - component: {fileID: 1602098699}
   - component: {fileID: 1602098703}
+  - component: {fileID: 1602098704}
   m_Layer: 0
   m_Name: Enemy_Test
   m_TagString: Enemy
@@ -443,7 +444,7 @@ Transform:
   m_GameObject: {fileID: 1602098698}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 1, z: 5}
+  m_LocalPosition: {x: 10, y: 1, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -471,6 +472,20 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1602098704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1602098698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e12f4ea212b314840a6904c1ec050874, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Server.ServerEnemyAI
+  enemyData: {fileID: 11400000, guid: 9ec39696dff82d64f834168de5d1fd77, type: 2}
+  currentState: 0
 --- !u!1 &1731011235
 GameObject:
   m_ObjectHideFlags: 0
