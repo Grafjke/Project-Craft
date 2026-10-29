@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Shared.UniversalItemData
   itemID: eq_rusty_sword
   itemName: "\u0420\u0436\u0430\u0432\u044B\u0439 \u043C\u0435\u0447"
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: -3753825769889500098, guid: 13fcca11cc5433c4d882b5a396b8f425, type: 3}
   itemType: 0
+  itemRarity: 0
+  upgradeLvl: 0
   slotID: 7
   handednessType: 0
   weaponOrArmorTag: Sword
