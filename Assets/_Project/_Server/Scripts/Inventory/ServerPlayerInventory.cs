@@ -11,9 +11,13 @@ namespace ProjectCraft._Server
         private readonly InventorySlot[] _itemTab = new InventorySlot[ITEMS_TAB_SIZE];
         private readonly InventorySlot[] _skillTab = new InventorySlot[SKILL_TAB_SIZE];
 
+        public event Action<bool> OnInventoryChanged;
+
         public ServerPlayerInventory()
         {
             ClearAll();
+            OnInventoryChanged?.Invoke(true);
+            OnInventoryChanged?.Invoke(false);
         }
 
         public void ClearAll()
@@ -36,17 +40,15 @@ namespace ProjectCraft._Server
             return freeCount >= requiredSlots;
         }
 
-        
+
         public bool AddItem(UniversalItemData item, int count, int upgradeLevel = 0)
         {
             if (item == null || count <= 0) return false;
 
-           
             bool isSkill = (item.itemType == ItemType.Capsule);
             var targetTab = isSkill ? _skillTab : _itemTab;
             int maxStack = item.maxStackValue;
 
-            
             if (maxStack > 1)
             {
                 for (int i = 0; i < targetTab.Length; i++)
@@ -59,22 +61,22 @@ namespace ProjectCraft._Server
                         targetTab[i].count += addAmount;
                         count -= addAmount;
 
-                        if (count <= 0) return true;
+                        if (count <= 0)
+                        {
+                            OnInventoryChanged?.Invoke(isSkill);
+                            return true;
+                        }
                     }
                 }
             }
-
 
             for (int i = 0; i < targetTab.Length; i++)
             {
                 if (targetTab[i].IsEmpty)
                 {
                     int addAmount = Math.Min(maxStack, count);
-                    targetTab[i] = new InventorySlot
-                    {
-                        itemData = item,
-                        count = addAmount
-                    };
+
+                    
                     targetTab[i] = new InventorySlot
                     {
                         itemInstanceId = System.Guid.NewGuid().ToString(),
@@ -84,11 +86,15 @@ namespace ProjectCraft._Server
                     };
 
                     count -= addAmount;
-                    if (count <= 0) return true;
+                    if (count <= 0)
+                    {
+                        OnInventoryChanged?.Invoke(isSkill);
+                        return true;
+                    }
                 }
             }
 
-            return false; // ЕСЛИ НЕТ МЕСТА!!!
+            return false;
         }
 
         public InventorySlot GetSlot(int index, bool isSkillTab)

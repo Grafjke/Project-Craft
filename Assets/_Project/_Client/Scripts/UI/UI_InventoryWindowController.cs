@@ -19,6 +19,8 @@ namespace ProjectCraft._Client.UI
 
         private bool _isViewingSkillsTab = false;
 
+        private ServerPlayerInventory _subscribedInventory;
+
         private void Start()
         {
             
@@ -26,12 +28,44 @@ namespace ProjectCraft._Client.UI
             {
                 targetPlayer = FindFirstObjectByType<ServerPlayerEntity>();
             }
+            TrySubscribeToInventory();
             ToggleTab(false);
         }
 
         private void OnEnable()
         {
+            TrySubscribeToInventory();
             RefreshUI();
+        }
+        private void OnDestroy()
+        {
+            
+            if (_subscribedInventory != null)
+            {
+                _subscribedInventory.OnInventoryChanged -= HandleInventoryChanged;
+            }
+        }
+        private void TrySubscribeToInventory()
+        {
+            if (targetPlayer == null || targetPlayer.Inventory == null) return;
+
+            if (_subscribedInventory == targetPlayer.Inventory) return;
+
+            if (_subscribedInventory != null)
+            {
+                _subscribedInventory.OnInventoryChanged -= HandleInventoryChanged;
+            }
+
+            _subscribedInventory = targetPlayer.Inventory;
+            _subscribedInventory.OnInventoryChanged += HandleInventoryChanged;
+        }
+
+        private void HandleInventoryChanged(bool isSkillTab)
+        {
+            if (isSkillTab == _isViewingSkillsTab)
+            {
+                RefreshUI();
+            }
         }
 
         public void ToggleTab(bool viewSkills)
@@ -57,6 +91,7 @@ namespace ProjectCraft._Client.UI
                 }
             }
 
+            TrySubscribeToInventory();
             RefreshUI();
         }
         
