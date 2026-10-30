@@ -10,45 +10,59 @@ namespace ProjectCraft._Client.UI
     {
 
         [Header("References")]
-        [SerializeField] private ServerPlayerEntity targetPlayer; 
+        [SerializeField] private ServerPlayerEntity targetPlayer;
         [SerializeField] private GameObject slotPrefab;
         [SerializeField] private Transform itemsGridParent;
 
-       
         private readonly List<UI_InventorySlot> _uiSlots = new List<UI_InventorySlot>();
-
         private bool _isViewingSkillsTab = false;
-
         private ServerPlayerInventory _subscribedInventory;
 
         private void Start()
         {
-            
-            if (targetPlayer == null)
-            {
-                targetPlayer = FindFirstObjectByType<ServerPlayerEntity>();
-            }
-            TrySubscribeToInventory();
+            EnsurePlayerConnection();
             ToggleTab(false);
         }
 
         private void OnEnable()
         {
-            TrySubscribeToInventory();
+            EnsurePlayerConnection();
             RefreshUI();
         }
+
+        private void Update()
+        {
+
+            if (_subscribedInventory == null)
+            {
+                EnsurePlayerConnection();
+            }
+        }
+
         private void OnDestroy()
         {
-            
             if (_subscribedInventory != null)
             {
                 _subscribedInventory.OnInventoryChanged -= HandleInventoryChanged;
             }
         }
+
+        private void EnsurePlayerConnection()
+        {
+            if (targetPlayer == null)
+            {
+                targetPlayer = FindFirstObjectByType<ServerPlayerEntity>();
+            }
+
+            if (targetPlayer != null && targetPlayer.Inventory != null)
+            {
+                TrySubscribeToInventory();
+            }
+        }
+
         private void TrySubscribeToInventory()
         {
             if (targetPlayer == null || targetPlayer.Inventory == null) return;
-
             if (_subscribedInventory == targetPlayer.Inventory) return;
 
             if (_subscribedInventory != null)
@@ -58,6 +72,8 @@ namespace ProjectCraft._Client.UI
 
             _subscribedInventory = targetPlayer.Inventory;
             _subscribedInventory.OnInventoryChanged += HandleInventoryChanged;
+
+            RefreshUI();
         }
 
         private void HandleInventoryChanged(bool isSkillTab)
@@ -71,11 +87,8 @@ namespace ProjectCraft._Client.UI
         public void ToggleTab(bool viewSkills)
         {
             _isViewingSkillsTab = viewSkills;
-
-          
             int requiredSize = _isViewingSkillsTab ? 50 : 100;
 
-           
             foreach (Transform child in itemsGridParent) Destroy(child.gameObject);
             _uiSlots.Clear();
 
@@ -91,10 +104,10 @@ namespace ProjectCraft._Client.UI
                 }
             }
 
-            TrySubscribeToInventory();
+            EnsurePlayerConnection();
             RefreshUI();
         }
-        
+
         public void RefreshUI()
         {
             if (targetPlayer == null || targetPlayer.Inventory == null) return;
