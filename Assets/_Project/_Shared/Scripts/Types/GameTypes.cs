@@ -18,10 +18,10 @@ namespace ProjectCraft._Shared
         Gloves,
         Boots,
         Neck,
-        Ring,
+        Ring1,
+        Ring2,
         Main_Hand, 
-        Off_Hand,  
-        None
+        Off_Hand  
     }
 
   
@@ -33,11 +33,31 @@ namespace ProjectCraft._Shared
     }
     public enum StatType
     {
-        Max_Health,
-        Armor,
-        Strength,
-        Intellect,
-        Physical_Damage
+       
+        Strength,   
+        Dexterity,  
+        Intelligence,           
+
+       
+        Crit_Chance,           
+        Crit_Damage,           
+        Attack_Cast_Speed,     
+        Fire_Damage_Percent_Bonus,   
+        Lightning_Damage_Percent_Bonus,
+        Shadow_Damage_Percent_Bonus,   
+        Physical_Damage_Percent_Bonus,
+
+        
+        Armor,                
+        Fire_Resistance,       
+        Lightning_Resistance,   
+        Shadow_Resistance,      
+
+    
+        Max_Health,             
+        HP_Regen,          
+        Max_Mana,             
+        MP_Regen             
     }
     public enum Rarity
     {

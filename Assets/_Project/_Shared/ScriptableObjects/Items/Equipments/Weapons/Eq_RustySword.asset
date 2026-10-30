@@ -24,9 +24,9 @@ MonoBehaviour:
   requiredLevel: 1
   maxStackValue: 1
   staticStatsBlueprint:
-  - statName: 4
+  - statName: 3
     baseValue: 5
-  - statName: 2
+  - statName: 0
     baseValue: 2
   requiredMaterials:
   - resource: {fileID: 11400000, guid: d7a9604706f2dee43abd2a7850032f17, type: 2}
