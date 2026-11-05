@@ -27,19 +27,30 @@ namespace ProjectCraft._Client.UI
         {
             if (slotData.IsEmpty || slotData.itemData == null)
             {
-                _hasItem = false;
-                if (iconImage != null) iconImage.gameObject.SetActive(false);
-                if (emptyPlaceholder != null) emptyPlaceholder.SetActive(true);
-            }
-            else
-            {
-                _hasItem = true;
+                _hasItem = false; 
                 if (iconImage != null)
                 {
-                    iconImage.gameObject.SetActive(true);
-                    iconImage.sprite = slotData.itemData.itemIcon;
+                    iconImage.enabled = false;
+                    iconImage.sprite = null;
                 }
-                if (emptyPlaceholder != null) emptyPlaceholder.SetActive(false);
+
+                if (emptyPlaceholder != null)
+                {
+                    emptyPlaceholder.SetActive(true);
+                }
+                return;
+            }
+
+            _hasItem = true;
+            if (iconImage != null)
+            {
+                iconImage.enabled = true;
+                iconImage.sprite = slotData.itemData.itemIcon;
+            }
+
+            if (emptyPlaceholder != null)
+            {
+                emptyPlaceholder.SetActive(false);
             }
         }
 
@@ -52,5 +63,6 @@ namespace ProjectCraft._Client.UI
                 _windowController.RequestUnequip(_slotId);
             }
         }
+        public int SlotId => _slotId;
     }
 }

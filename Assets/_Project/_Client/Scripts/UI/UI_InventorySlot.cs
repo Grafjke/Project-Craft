@@ -27,7 +27,7 @@ namespace ProjectCraft._Client.UI
 
         public void Render(InventorySlot data)
         {
-            if (data.IsEmpty || data.itemData == null)
+            if (data.IsEmpty)
             {
                 _hasItem = false;
                 iconImage.gameObject.SetActive(false);
@@ -37,19 +37,26 @@ namespace ProjectCraft._Client.UI
             }
 
             _hasItem = true;
-            
             iconImage.gameObject.SetActive(true);
-            iconImage.sprite = data.itemData.itemIcon;
 
-            
-            if (data.count > 1)
+            if (data.skillData != null)
             {
-                countText.gameObject.SetActive(true);
-                countText.text = data.count.ToString();
-            }
-            else
-            {
+                iconImage.sprite = data.skillData.skillIcon;
                 countText.gameObject.SetActive(false);
+            }
+            else if (data.itemData != null)
+            {
+                iconImage.sprite = data.itemData.itemIcon;
+
+                if (data.count > 1)
+                {
+                    countText.gameObject.SetActive(true);
+                    countText.text = data.count.ToString();
+                }
+                else
+                {
+                    countText.gameObject.SetActive(false);
+                }
             }
 
             if (lockOverlay != null) lockOverlay.gameObject.SetActive(data.isLocked);

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35601fa5a635d564b8e44f50af3185ed, type: 3}
+  m_Name: Crushing_Strike
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Shared.UniversalSkillData
+  skillID: crushing_strike
+  skillName: Crushing_Strike
+  skillIcon: {fileID: -4405291601049639929, guid: 129a78ba117aa6143988b2771cbd1b6d, type: 3}
+  isPassive: 0
+  castTime: 0
+  cooldown: 2
+  manaCost: 10
+  requiredWeaponTags:
+  - Sword
+  elementalTags:
+  - Strenght
+  movementDistance: 0
+  statusEffectToApply: 
+  baseDamageFormulaType: 
+  baseDamageValue: 25

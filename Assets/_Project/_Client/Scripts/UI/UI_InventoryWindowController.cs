@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ProjectCraft._Server;
 using ProjectCraft._Shared;
+using UnityEngine.UI;
 
 namespace ProjectCraft._Client.UI
 {
@@ -13,6 +14,8 @@ namespace ProjectCraft._Client.UI
         [SerializeField] private ServerPlayerEntity targetPlayer;
         [SerializeField] private GameObject slotPrefab;
         [SerializeField] private Transform itemsGridParent;
+        [SerializeField] private Button btnItemsTab;
+        [SerializeField] private Button btnSkillsTab;
 
         private readonly List<UI_InventorySlot> _uiSlots = new List<UI_InventorySlot>();
         private bool _isViewingSkillsTab = false;
@@ -20,8 +23,20 @@ namespace ProjectCraft._Client.UI
 
         private void Start()
         {
+            if (btnItemsTab != null)
+            {
+                btnItemsTab.onClick.RemoveAllListeners();
+                btnItemsTab.onClick.AddListener(() => ToggleTab(false));
+            }
+
+            if (btnSkillsTab != null)
+            {
+                btnSkillsTab.onClick.RemoveAllListeners();
+                btnSkillsTab.onClick.AddListener(() => ToggleTab(true));
+            }
+
             EnsurePlayerConnection();
-            ToggleTab(false);
+            ToggleTab(false); 
         }
 
         private void OnEnable()
@@ -89,23 +104,40 @@ namespace ProjectCraft._Client.UI
             _isViewingSkillsTab = viewSkills;
             int requiredSize = _isViewingSkillsTab ? 50 : 100;
 
-            foreach (Transform child in itemsGridParent) Destroy(child.gameObject);
-            _uiSlots.Clear();
-
-            for (int i = 0; i < requiredSize; i++)
+            while (_uiSlots.Count < requiredSize)
             {
                 GameObject newSlotGo = Instantiate(slotPrefab, itemsGridParent);
                 UI_InventorySlot slotScript = newSlotGo.GetComponent<UI_InventorySlot>();
+                if (slotScript != null) _uiSlots.Add(slotScript);
+            }
 
-                if (slotScript != null)
+            for (int i = 0; i < _uiSlots.Count; i++)
+            {
+                if (i < requiredSize)
                 {
-                    slotScript.Setup(i, _isViewingSkillsTab, this);
-                    _uiSlots.Add(slotScript);
+                    _uiSlots[i].gameObject.SetActive(true);
+                    _uiSlots[i].Setup(i, _isViewingSkillsTab, this);
+                }
+                else
+                {
+                    _uiSlots[i].gameObject.SetActive(false);
                 }
             }
 
+            if (btnItemsTab != null) btnItemsTab.interactable = _isViewingSkillsTab;
+            if (btnSkillsTab != null) btnSkillsTab.interactable = !_isViewingSkillsTab;
+
             EnsurePlayerConnection();
             RefreshUI();
+            if (itemsGridParent != null)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(itemsGridParent.GetComponent<RectTransform>());
+
+                if (itemsGridParent.parent != null)
+                {
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(itemsGridParent.parent.GetComponent<RectTransform>());
+                }
+            }
         }
 
         public void RefreshUI()

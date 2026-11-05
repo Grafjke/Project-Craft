@@ -87,10 +87,10 @@ public class ServerPlayerEntity : MonoBehaviour
 
     public void SendSystemMessage(string message)
     {
-        Debug.LogWarning($"[Server Network Message]: {message}");
+        Debug.Log($"[Server Network Message]: {message}");
     }
 
 
-
+    
 
 }

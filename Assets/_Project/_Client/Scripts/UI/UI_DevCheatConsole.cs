@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,8 +14,8 @@ namespace ProjectCraft._Client.UI
         [SerializeField] private ServerPlayerEntity targetPlayer;
         [SerializeField] private GameObject consolePanel;
 
-        [Header("Item Spawner Controls (Вкладка предметов)")]
-        [SerializeField] private TMP_Dropdown itemDropdown;  
+        [Header("Item & Skill Spawner Controls")]
+        [SerializeField] private TMP_Dropdown itemDropdown;
         [SerializeField] private TMP_InputField itemCountInput;
         [SerializeField] private Button btnSpawnItem;
 
@@ -23,15 +24,26 @@ namespace ProjectCraft._Client.UI
         [SerializeField] private Button btnSetLevel;
         [SerializeField] private Button btnToggleCombat;
 
-        [Header("All Registered Items Database")]
+        [Header("All Registered Databases")]
         [SerializeField] private List<UniversalItemData> allProjectItems = new List<UniversalItemData>();
+        [SerializeField] private List<UniversalSkillData> allProjectSkills = new List<UniversalSkillData>();
+
+        // Внутренний контейнер для маппинга упорядоченных строк дропдауна к реальным ассетам
+        private struct CheatListEntry
+        {
+            public bool isHeader;       // Это заголовок категории (нельзя спавнить)
+            public bool isSkill;        // Навык или предмет
+            public UniversalItemData itemRef;
+            public UniversalSkillData skillRef;
+        }
+
+        private readonly List<CheatListEntry> _dropdownMap = new List<CheatListEntry>();
 
         private void Start()
         {
             if (targetPlayer == null)
                 targetPlayer = FindFirstObjectByType<ServerPlayerEntity>();
 
-           
             if (consolePanel != null) consolePanel.SetActive(false);
 
             PopulateItemDropdown();
@@ -58,62 +70,135 @@ namespace ProjectCraft._Client.UI
             if (itemDropdown == null) return;
 
             itemDropdown.ClearOptions();
+            _dropdownMap.Clear();
             List<string> options = new List<string>();
 
+            // 1. Автозагрузка баз данных из Resources
             if (allProjectItems.Count == 0)
             {
                 UniversalItemData[] loadedItems = Resources.LoadAll<UniversalItemData>("");
                 allProjectItems.AddRange(loadedItems);
             }
-
-            foreach (var item in allProjectItems)
+            if (allProjectSkills.Count == 0)
             {
-                if (item != null)
-                {
-                    options.Add($"{item.itemName} (ID: {item.itemID})");
-                }
+                UniversalSkillData[] loadedSkills = Resources.LoadAll<UniversalSkillData>("");
+                allProjectSkills.AddRange(loadedSkills);
+            }
+
+            // 2. Распределяем предметы по категориям GDD
+            List<UniversalItemData> equipment = allProjectItems.FindAll(i => i != null && i.itemType == ItemType.Equipment);
+            List<UniversalItemData> capsules = allProjectItems.FindAll(i => i != null && i.itemType == ItemType.Capsule);
+            List<UniversalItemData> materials = allProjectItems.FindAll(i => i != null && i.itemType == ItemType.Resource);
+
+            // 3. Распределяем навыки
+            List<UniversalSkillData> activeSkills = allProjectSkills.FindAll(s => s != null && !s.isPassive);
+            List<UniversalSkillData> passiveSkills = allProjectSkills.FindAll(s => s != null && s.isPassive);
+
+            // --- ФОРМИРУЕМ СТРУКТУРИРОВАННЫЙ СПИСОК ---
+
+            // Категория: Снаряжение
+            if (equipment.Count > 0)
+            {
+                AddCategoryHeader(options, "=== [СНАРЯЖЕНИЕ / ЭКИПИРОВКА] ===");
+                foreach (var item in equipment) AddItemItem(options, item);
+            }
+
+            // Категория: Капсулы
+            if (capsules.Count > 0)
+            {
+                AddCategoryHeader(options, "=== [КАПСУЛЫ ПРИЗЫВА] ===");
+                foreach (var item in capsules) AddItemItem(options, item);
+            }
+
+            // Категория: Ресурсы
+            if (materials.Count > 0)
+            {
+                AddCategoryHeader(options, "=== [РЕСУРСЫ КРАФТА] ===");
+                foreach (var item in materials) AddItemItem(options, item);
+            }
+
+            // Категория: Активные навыки
+            if (activeSkills.Count > 0)
+            {
+                AddCategoryHeader(options, "=== [АКТИВНЫЕ НАВЫКИ ДУШ] ===");
+                foreach (var skill in activeSkills) AddSkillItem(options, skill);
+            }
+
+            // Категория: Пассивные навыки
+            if (passiveSkills.Count > 0)
+            {
+                AddCategoryHeader(options, "=== [ПАССИВНЫЕ НАВЫКИ ДУШ] ===");
+                foreach (var skill in passiveSkills) AddSkillItem(options, skill);
             }
 
             itemDropdown.AddOptions(options);
         }
 
+        private void AddCategoryHeader(List<string> options, string headerName)
+        {
+            options.Add(headerName);
+            _dropdownMap.Add(new CheatListEntry { isHeader = true });
+        }
+
+        private void AddItemItem(List<string> options, UniversalItemData item)
+        {
+            options.Add($"  • {item.itemName} (ID: {item.itemID})");
+            _dropdownMap.Add(new CheatListEntry { isHeader = false, isSkill = false, itemRef = item });
+        }
+
+        private void AddSkillItem(List<string> options, UniversalSkillData skill)
+        {
+            options.Add($"  • [Навык] {skill.skillName} (ID: {skill.skillID})");
+            _dropdownMap.Add(new CheatListEntry { isHeader = false, isSkill = true, skillRef = skill });
+        }
 
         private void Cheat_SpawnSelectedItem()
         {
-            if (targetPlayer == null || targetPlayer.Inventory == null || allProjectItems.Count == 0) return;
+            if (targetPlayer == null || targetPlayer.Inventory == null || _dropdownMap.Count == 0) return;
 
             int selectedIndex = itemDropdown.value;
-            if (selectedIndex < 0 || selectedIndex >= allProjectItems.Count) return;
+            if (selectedIndex < 0 || selectedIndex >= _dropdownMap.Count) return;
 
-            UniversalItemData selectedItem = allProjectItems[selectedIndex];
+            CheatListEntry entry = _dropdownMap[selectedIndex];
 
+            // Защита: Если игрок нажал на заголовок категории
+            if (entry.isHeader)
+            {
+                targetPlayer.SendSystemMessage("Выберите конкретный предмет или навык из списка!");
+                return;
+            }
+
+            // Считываем количество
             int count = 1;
             if (itemCountInput != null && !string.IsNullOrEmpty(itemCountInput.text))
             {
                 int.TryParse(itemCountInput.text, out count);
             }
 
-            Debug.Log($"Выдан предмет: {selectedItem.itemName} x{count}");
-            targetPlayer.Inventory.AddItem(selectedItem, count);
+            // Разделение логики выдачи на основе типа выбранной строки
+            if (entry.isSkill)
+            {
+                // Выдача навыка во 2-ю вкладку инвентаря (используем метод из прошлого шага)
+                Debug.Log($"[DevCheat] Выдан навык души во вкладку Навыков: {entry.skillRef.skillName}");
+                targetPlayer.Inventory.AddSkill(entry.skillRef);
+            }
+            else
+            {
+                // Выдача обычного предмета в 1-ю вкладку инвентаря
+                Debug.Log($"[DevCheat] Выдан предмет: {entry.itemRef.itemName} x{count}");
+                targetPlayer.Inventory.AddItem(entry.itemRef, count);
+            }
         }
 
         private void Cheat_SetPlayerLevel()
         {
-            if (targetPlayer == null || setLevelInput == null) return;
+            
 
-            if (int.TryParse(setLevelInput.text, out int targetLevel))
-            {
-                // ЗАГЛУШКА!!!!!!!!!
 
-                Debug.Log($"Запрос на изменение уровня на: {targetLevel}");
-
-            }
         }
 
         private void Cheat_ToggleCombatState()
         {
-            // ЗАГЛУШКА!!!!!!!!!
-
             if (targetPlayer == null) return;
             Debug.Log("Переключение боевого режима игрока");
         }

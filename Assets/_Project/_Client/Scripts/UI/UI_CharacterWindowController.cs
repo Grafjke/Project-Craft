@@ -28,6 +28,17 @@ namespace ProjectCraft._Client.UI
             }
             InitializeWindow();
         }
+        private void Update()
+        {
+            if (_subEquipment == null && targetPlayer != null && targetPlayer.Equipment != null)
+            {
+                InitializeWindow();
+                RefreshWindow();
+            }
+
+        }
+
+
 
         private void OnEnable()
         {
@@ -72,11 +83,16 @@ namespace ProjectCraft._Client.UI
 
         private void HandleEquipmentChanged(int slotId)
         {
-            if (slotId >= 0 && slotId < equipmentSlots.Length)
+            for (int i = 0; i < equipmentSlots.Length; i++)
             {
-                var paperdoll = _subEquipment.GetPaperdoll();
-                equipmentSlots[slotId].Render(paperdoll[slotId]);
+                if (equipmentSlots[i] != null && equipmentSlots[i].SlotId == slotId)
+                {
+                    var paperdoll = _subEquipment.GetPaperdoll();
+                    equipmentSlots[i].Render(paperdoll[slotId]);
+                    break;
+                }
             }
+            RefreshStatsUI();
         }
 
         private void HandleStatsChanged()
@@ -89,11 +105,21 @@ namespace ProjectCraft._Client.UI
             if (targetPlayer == null || _subEquipment == null) return;
 
             var paperdoll = _subEquipment.GetPaperdoll();
+
             for (int i = 0; i < equipmentSlots.Length; i++)
             {
-                if (paperdoll.TryGetValue(i, out InventorySlot slotData))
+                var slotUI = equipmentSlots[i];
+                if (slotUI == null) continue;
+
+                int targetSlotKey = slotUI.SlotId;
+
+                if (paperdoll.TryGetValue(targetSlotKey, out InventorySlot slotData))
                 {
-                    equipmentSlots[i].Render(slotData);
+                    slotUI.Render(slotData);
+                }
+                else
+                {
+                    slotUI.Render(default(InventorySlot));
                 }
             }
 
@@ -146,9 +172,15 @@ namespace ProjectCraft._Client.UI
 
         public void RequestUnequip(int slotId)
         {
-            if (_subEquipment != null && targetPlayer.Inventory != null)
+            if (targetPlayer == null || _subEquipment == null || targetPlayer.Inventory == null) return;
+
+            // Вызываем серверный метод снятия предмета, который мы исправили ранее
+            bool success = _subEquipment.UnequipItem(slotId, targetPlayer.Inventory);
+
+            if (success)
             {
-                _subEquipment.UnequipItem(slotId, targetPlayer.Inventory);
+                Debug.Log($"[Client UI] Предмет из слота {(SlotType)slotId} успешно снят в инвентарь.");
+                // Обновление UI произойдет автоматически, так как UnequipItem триггерит OnEquipmentChanged и OnInventoryChanged
             }
         }
     }

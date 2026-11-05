@@ -51,7 +51,6 @@ namespace ProjectCraft._Server
 
             if (itemData.slotID != (SlotType)targetSlotId)
             {
-
                 if ((itemData.slotID == SlotType.Ring1 || itemData.slotID == SlotType.Ring2) &&
                     (targetSlotId == SLOT_RING_1 || targetSlotId == SLOT_RING_2))
                 {
@@ -63,7 +62,6 @@ namespace ProjectCraft._Server
                     return false;
                 }
             }
-
 
             if (targetSlotId == SLOT_MAIN_HAND && itemData.handednessType == HandednessType.Two_Handed)
             {
@@ -80,7 +78,6 @@ namespace ProjectCraft._Server
                 }
                 IsOffHandBlocked = true;
             }
-
             else if (targetSlotId == SLOT_OFF_HAND && IsOffHandBlocked)
             {
                 _player.SendSystemMessage("Левая рука заблокирована двуручным оружием!");
@@ -92,9 +89,9 @@ namespace ProjectCraft._Server
                 IsOffHandBlocked = false;
             }
 
+
             InventorySlot equippedBefore = _slots[targetSlotId];
 
-            invSlot.count = 1;
             _slots[targetSlotId] = invSlot;
 
             if (!equippedBefore.IsEmpty)
@@ -108,6 +105,9 @@ namespace ProjectCraft._Server
 
             _player.RecalculateModifiersCache();
             OnEquipmentChanged?.Invoke(targetSlotId);
+
+            inventory.InvokeOnInventoryChanged(false);
+
             return true;
         }
 
@@ -137,6 +137,9 @@ namespace ProjectCraft._Server
 
             _player.RecalculateModifiersCache();
             OnEquipmentChanged?.Invoke(slotId);
+
+            inventory.InvokeOnInventoryChanged(false);
+
             return true;
         }
 

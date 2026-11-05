@@ -97,6 +97,23 @@ namespace ProjectCraft._Server
             return false;
         }
 
+        public bool AddSkill(UniversalSkillData skill)
+        {
+            if (skill == null) return false;
+
+            for (int i = 0; i < _skillTab.Length; i++)
+            {
+                if (_skillTab[i].IsEmpty)
+                {
+                    _skillTab[i] = new InventorySlot(skill);
+                    OnInventoryChanged?.Invoke(true);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
         public InventorySlot GetSlot(int index, bool isSkillTab)
         {
 
@@ -105,6 +122,7 @@ namespace ProjectCraft._Server
             return targetTab[index];
         }
 
+     
         public void SetSlot(int index, InventorySlot slot, bool isSkillTab)
         {
             var targetTab = isSkillTab ? _skillTab : _itemTab;
@@ -114,6 +132,11 @@ namespace ProjectCraft._Server
         public void ClearSlot(int index, bool isSkillTab)
         {
             SetSlot(index, default, isSkillTab);
+        }
+
+        public void InvokeOnInventoryChanged(bool isSkillTab)
+        {
+            OnInventoryChanged?.Invoke(isSkillTab);
         }
     }
 }
