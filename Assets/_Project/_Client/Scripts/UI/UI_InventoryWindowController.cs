@@ -99,7 +99,7 @@ namespace ProjectCraft._Client.UI
 
                 if (slotScript != null)
                 {
-                    slotScript.Setup(i, _isViewingSkillsTab);
+                    slotScript.Setup(i, _isViewingSkillsTab, this);
                     _uiSlots.Add(slotScript);
                 }
             }
@@ -116,6 +116,30 @@ namespace ProjectCraft._Client.UI
             {
                 InventorySlot serverSlotData = targetPlayer.Inventory.GetSlot(i, _isViewingSkillsTab);
                 _uiSlots[i].Render(serverSlotData);
+            }
+        }
+        public void RequestEquipItem(int slotIndex)
+        {
+            if (targetPlayer == null || targetPlayer.Inventory == null || targetPlayer.Equipment == null) return;
+
+            InventorySlot slotData = targetPlayer.Inventory.GetSlot(slotIndex, _isViewingSkillsTab);
+
+            if (slotData.IsEmpty || slotData.itemData == null || _isViewingSkillsTab) return;
+
+            if (slotData.itemData.itemType == ItemType.Equipment)
+            {
+                int targetSlotId = (int)slotData.itemData.slotID;
+
+                bool success = targetPlayer.Equipment.EquipItem(slotIndex, targetSlotId, targetPlayer.Inventory, slotData.itemData);
+
+                if (success)
+                {
+                    Debug.Log($"Предмет {slotData.itemData.itemName} экипирован в слот {slotData.itemData.slotID}");
+                }
+            }
+            else
+            {
+                targetPlayer.SendSystemMessage("Этот предмет нельзя экипировать!");
             }
         }
     }
