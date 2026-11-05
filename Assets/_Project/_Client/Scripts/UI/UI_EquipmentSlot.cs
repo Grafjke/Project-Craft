@@ -12,14 +12,17 @@ namespace ProjectCraft._Client.UI
         [SerializeField] private GameObject emptyPlaceholder;
 
         private int _slotId;
+        private int _customParam;
+        
+
         private SlotType _expectedSlotType;
-        private UI_CharacterWindowController _windowController;
+        private IItemSlotClickHandler _windowController;
         private bool _hasItem;
 
-        public void SetupSlot(int id, SlotType slotType, UI_CharacterWindowController controller)
+        public void SetupSlot(int id, int customParam, IItemSlotClickHandler controller)
         {
             _slotId = id;
-            _expectedSlotType = slotType;
+            _customParam = customParam;
             _windowController = controller;
         }
 
@@ -60,7 +63,7 @@ namespace ProjectCraft._Client.UI
 
             if (eventData.button == PointerEventData.InputButton.Right)
             {
-                _windowController.RequestUnequip(_slotId);
+                _windowController.OnSlotRightClicked(_slotId, _customParam);
             }
         }
         public int SlotId => _slotId;

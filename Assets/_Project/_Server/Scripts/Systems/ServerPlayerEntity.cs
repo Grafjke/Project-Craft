@@ -14,6 +14,7 @@ public class ServerPlayerEntity : MonoBehaviour
     
     public ServerPlayerInventory Inventory { get; private set; }
     public ServerPlayerEquipment Equipment { get; private set; }
+    public ServerPlayerSkills Skills { get; private set; }
 
     private readonly Dictionary<StatType, float> _currentStats = new Dictionary<StatType, float>();
     public event Action OnStatsChanged;
@@ -22,6 +23,7 @@ public class ServerPlayerEntity : MonoBehaviour
     {
         Inventory = new ServerPlayerInventory();
         Equipment = new ServerPlayerEquipment(this);
+        Skills = gameObject.AddComponent<ServerPlayerSkills>();
         ResetStatsToDefault();
     }
     private void ResetStatsToDefault()

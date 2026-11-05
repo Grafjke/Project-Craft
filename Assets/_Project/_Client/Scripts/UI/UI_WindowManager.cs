@@ -10,8 +10,10 @@ public class UI_WindowManager : MonoBehaviour
     [SerializeField] private GameObject[] leftSideWindows;
 
 
+
     [Header("Specific Left Windows References")]
     [SerializeField] private GameObject characterWindow;
+    [SerializeField] private GameObject altarWindow;
 
     private void Awake()
     { 
@@ -31,6 +33,10 @@ public class UI_WindowManager : MonoBehaviour
         if (Keyboard.current.cKey.wasPressedThisFrame)
         {
             ToggleLeftWindowExclusive(characterWindow);
+        }
+        if (Keyboard.current.kKey.wasPressedThisFrame)
+        {
+            ToggleLeftWindowExclusive(altarWindow);
         }
     }
 

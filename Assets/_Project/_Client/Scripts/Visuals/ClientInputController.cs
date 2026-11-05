@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using static Unity.Multiplayer.Editor.EditorMultiplayerRolesManager.AutomaticSelection;
 
@@ -21,6 +22,10 @@ public class ClientInputController : MonoBehaviour
 
     void Update()
     {
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
 
         if (Mouse.current != null && Mouse.current.rightButton.isPressed)
         {

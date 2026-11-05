@@ -17,6 +17,9 @@ namespace ProjectCraft._Client.UI
         [SerializeField] private Button btnItemsTab;
         [SerializeField] private Button btnSkillsTab;
 
+        [Header("Altar Window Link")]
+        [SerializeField] private UI_AltarWindowController altarWindowController;
+
         private readonly List<UI_InventorySlot> _uiSlots = new List<UI_InventorySlot>();
         private bool _isViewingSkillsTab = false;
         private ServerPlayerInventory _subscribedInventory;
@@ -162,13 +165,19 @@ namespace ProjectCraft._Client.UI
             {
                 if (slotData.itemData != null && slotData.itemData.itemType == ItemType.Capsule)
                 {
-                    bool success = targetPlayer.Inventory.Server_OpenSummonCapsule(slotIndex, 1);
-
-                    if (success)
-                    {
-                        Debug.Log($"Успешно отправлен запрос на открытие 1 капсулы из слота №{slotIndex}");
-                    }
+                    targetPlayer.Inventory.Server_OpenSummonCapsule(slotIndex, 1);
                     return;
+                }
+
+                if (slotData.skillData != null)
+                {
+                    if (altarWindowController == null)
+                        altarWindowController = FindFirstObjectByType<UI_AltarWindowController>();
+
+                    if (altarWindowController != null)
+                    {
+                        altarWindowController.RequestEquipSkillToAltar(slotIndex, slotData.skillData.isPassive);
+                    }
                 }
                 return;
             }

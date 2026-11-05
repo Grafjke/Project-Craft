@@ -6,7 +6,7 @@ using ProjectCraft._Shared;
 
 namespace ProjectCraft._Client.UI
 {
-    public class UI_CharacterWindowController : MonoBehaviour
+    public class UI_CharacterWindowController : MonoBehaviour, IItemSlotClickHandler
     {
         [Header("References")]
         [SerializeField] private ServerPlayerEntity targetPlayer;
@@ -59,7 +59,7 @@ namespace ProjectCraft._Client.UI
             {
                 if (equipmentSlots[i] != null)
                 {
-                    equipmentSlots[i].SetupSlot(i, (SlotType)i, this);
+                    equipmentSlots[i].SetupSlot(i, 0, this);
                 }
             }
 
@@ -170,17 +170,14 @@ namespace ProjectCraft._Client.UI
             statsListText.text = sb.ToString();
         }
 
-        public void RequestUnequip(int slotId)
+        public void OnSlotRightClicked(int slotId, int customParam)
         {
             if (targetPlayer == null || _subEquipment == null || targetPlayer.Inventory == null) return;
 
-            // Вызываем серверный метод снятия предмета, который мы исправили ранее
             bool success = _subEquipment.UnequipItem(slotId, targetPlayer.Inventory);
-
             if (success)
             {
-                Debug.Log($"[Client UI] Предмет из слота {(SlotType)slotId} успешно снят в инвентарь.");
-                // Обновление UI произойдет автоматически, так как UnequipItem триггерит OnEquipmentChanged и OnInventoryChanged
+                Debug.Log($"[Client UI] Предмет из слота успешно снят в инвентарь.");
             }
         }
     }
