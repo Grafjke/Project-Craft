@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace ProjectCraft._Client.UI
 {
-    public class UI_InventorySlot : MonoBehaviour
+    public class UI_InventorySlot : MonoBehaviour, IPointerClickHandler
     {
         [Header("UI Components")]
         [SerializeField] private Image iconImage; 
