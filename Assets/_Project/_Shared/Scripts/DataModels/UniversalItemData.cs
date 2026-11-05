@@ -29,6 +29,10 @@ namespace ProjectCraft._Shared
 
         [Header("Crafting Recipe (For Forge NPC)")]
         public ResourceCost[] requiredMaterials;
+
+        [Header("Capsule Content Settings")]
+        [Tooltip("Пул навыков (a, b, c)")]
+        public UniversalSkillData[] containedSkills;
     }
 
     [System.Serializable]

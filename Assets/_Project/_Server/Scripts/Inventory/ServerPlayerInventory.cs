@@ -53,7 +53,7 @@ namespace ProjectCraft._Server
             {
                 for (int i = 0; i < targetTab.Length; i++)
                 {
-                    if (!targetTab[i].IsEmpty && targetTab[i].itemData.itemID == item.itemID && targetTab[i].count < maxStack)
+                    if (!targetTab[i].IsEmpty && targetTab[i].itemData != null && targetTab[i].itemData.itemID == item.itemID && targetTab[i].count < maxStack)
                     {
                         int space = maxStack - targetTab[i].count;
                         int addAmount = Math.Min(space, count);
@@ -76,7 +76,6 @@ namespace ProjectCraft._Server
                 {
                     int addAmount = Math.Min(maxStack, count);
 
-                    
                     targetTab[i] = new InventorySlot
                     {
                         itemInstanceId = System.Guid.NewGuid().ToString(),
@@ -112,6 +111,49 @@ namespace ProjectCraft._Server
             }
             return false;
         }
+        public bool Server_OpenSummonCapsule(int indexInSkillTab, int amountToOpen)
+        {
+            if (indexInSkillTab < 0 || indexInSkillTab >= _skillTab.Length) return false;
+
+            InventorySlot slotData = _skillTab[indexInSkillTab];
+
+            if (slotData.IsEmpty || slotData.itemData == null || slotData.itemData.itemType != ItemType.Capsule) return false;
+
+            if (amountToOpen <= 0 || amountToOpen > slotData.count) return false;
+
+            if (slotData.itemData.containedSkills == null || slotData.itemData.containedSkills.Length == 0) return false;
+
+            int slotsFreedByCapsule = (slotData.count == amountToOpen) ? 1 : 0;
+            int netRequiredSlots = amountToOpen - slotsFreedByCapsule;
+
+            if (netRequiredSlots > 0 && !HasEnoughFreeSlots(true, netRequiredSlots))
+            {
+                return false;
+            }
+
+            UniversalSkillData[] pool = slotData.itemData.containedSkills;
+
+            slotData.count -= amountToOpen;
+            if (slotData.count <= 0)
+            {
+                _skillTab[indexInSkillTab] = default;
+            }
+            else
+            {
+                _skillTab[indexInSkillTab] = slotData; 
+            }
+            
+            for (int i = 0; i < amountToOpen; i++)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, pool.Length);
+                UniversalSkillData rolledSkill = pool[randomIndex];
+
+                AddSkill(rolledSkill);
+            }
+
+            OnInventoryChanged?.Invoke(true);
+            return true;
+        }
 
 
         public InventorySlot GetSlot(int index, bool isSkillTab)
@@ -138,5 +180,8 @@ namespace ProjectCraft._Server
         {
             OnInventoryChanged?.Invoke(isSkillTab);
         }
+
+
+
     }
 }

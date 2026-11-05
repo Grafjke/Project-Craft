@@ -156,12 +156,26 @@ namespace ProjectCraft._Client.UI
 
             InventorySlot slotData = targetPlayer.Inventory.GetSlot(slotIndex, _isViewingSkillsTab);
 
-            if (slotData.IsEmpty || slotData.itemData == null || _isViewingSkillsTab) return;
+            if (slotData.IsEmpty) return;
 
-            if (slotData.itemData.itemType == ItemType.Equipment)
+            if (_isViewingSkillsTab)
+            {
+                if (slotData.itemData != null && slotData.itemData.itemType == ItemType.Capsule)
+                {
+                    bool success = targetPlayer.Inventory.Server_OpenSummonCapsule(slotIndex, 1);
+
+                    if (success)
+                    {
+                        Debug.Log($"Успешно отправлен запрос на открытие 1 капсулы из слота №{slotIndex}");
+                    }
+                    return;
+                }
+                return;
+            }
+
+            if (slotData.itemData != null && slotData.itemData.itemType == ItemType.Equipment)
             {
                 int targetSlotId = (int)slotData.itemData.slotID;
-
                 bool success = targetPlayer.Equipment.EquipItem(slotIndex, targetSlotId, targetPlayer.Inventory, slotData.itemData);
 
                 if (success)

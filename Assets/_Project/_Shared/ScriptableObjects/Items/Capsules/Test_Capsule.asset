@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24f013836763cf941b6e724cf56d08dd, type: 3}
+  m_Name: Test_Capsule
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Shared.UniversalItemData
+  itemID: test_capsule
+  itemName: Test_Capsule
+  itemIcon: {fileID: 6555003715170043443, guid: e29e4964333747b4b84b4d2f6656cf78, type: 3}
+  itemType: 2
+  itemRarity: 0
+  upgradeLvl: 0
+  slotID: 0
+  handednessType: 0
+  weaponOrArmorTag: 
+  requiredLevel: 1
+  maxStackValue: 99
+  staticStatsBlueprint: []
+  requiredMaterials: []
+  containedSkills:
+  - {fileID: 11400000, guid: 5ff0195979ce03244b3fd7e1bdd7de68, type: 2}

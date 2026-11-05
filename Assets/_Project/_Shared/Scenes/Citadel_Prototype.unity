@@ -3946,6 +3946,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 080ed4c4c24cc1e458eb8e2a6a053506, type: 2}
   - {fileID: 11400000, guid: 8a404a4205596704f84e083cda1687e0, type: 2}
   - {fileID: 11400000, guid: d7a9604706f2dee43abd2a7850032f17, type: 2}
+  - {fileID: 11400000, guid: 953bcb41b1db36e479919a9981ef5f6a, type: 2}
   allProjectSkills:
   - {fileID: 11400000, guid: 5ff0195979ce03244b3fd7e1bdd7de68, type: 2}
 --- !u!1 &1185710354
