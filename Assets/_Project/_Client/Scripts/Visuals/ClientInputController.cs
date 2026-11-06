@@ -1,3 +1,4 @@
+using ProjectCraft._Server;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
@@ -12,11 +13,16 @@ public class ClientInputController : MonoBehaviour
     [SerializeField] private ServerMovementController serverMovement;
     [SerializeField] private ServerTargetController serverTarget;
 
+    [Header("Interaction Input")]
+    [SerializeField] private KeyCode interactKey = KeyCode.E;
+    [SerializeField] private LayerMask npcLayer;
 
+    private ServerPlayerEntity _localPlayer;
 
 
     void Start()
     {
+        _localPlayer = GetComponent<ServerPlayerEntity>();
         _mainCamera = Camera.main;
     }
 
@@ -44,7 +50,38 @@ public class ClientInputController : MonoBehaviour
                 serverTarget.SelectTargetViaTab();
             }
         }
+        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            TryInteractWithNearestNPC();
+        }
+    }
+    private void TryInteractWithNearestNPC()
+    {
+        if (_localPlayer == null) return;
 
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 5f);
+        ServerNPCAltar closestAltar = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (var hitCollider in hitColliders)
+        {
+            ServerNPCAltar altar = hitCollider.GetComponent<ServerNPCAltar>();
+            if (altar != null)
+            {
+                float distance = Vector3.Distance(transform.position, altar.transform.position);
+
+                if (distance <= altar.InteractionRadius && distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestAltar = altar;
+                }
+            }
+        }
+
+        if (closestAltar != null)
+        {
+            closestAltar.Interact(_localPlayer);
+        }
     }
 
     private void SendMovementRequest()

@@ -1,10 +1,10 @@
 using ProjectCraft._Client.UI;
+using ProjectCraft._Server;
 using ProjectCraft._Shared;
 using UnityEngine;
 
 public class UI_AltarWindowController : MonoBehaviour, IItemSlotClickHandler
 {
-
 
 
     [Header("Global References")]
@@ -15,6 +15,7 @@ public class UI_AltarWindowController : MonoBehaviour, IItemSlotClickHandler
     [SerializeField] private UI_EquipmentSlot[] passiveSlotsUI;
 
     private ServerPlayerSkills _subSkills;
+    private ServerNPCAltar _activeAltar;
 
     private void Start()
     {
@@ -30,8 +31,35 @@ public class UI_AltarWindowController : MonoBehaviour, IItemSlotClickHandler
     private void Update()
     {
         if (_subSkills == null)
+        {
             EnsurePlayerConnection();
+            return;
+        }
+
+        // РЕАКТИВНЫЙ МОНИТОРИНГ: Работает только когда окно открыто на экране
+        if (_activeAltar != null && targetPlayer != null)
+        {
+            float distance = Vector3.Distance(targetPlayer.transform.position, _activeAltar.transform.position);
+
+            if (distance > _activeAltar.InteractionRadius + 0.5f)
+            {
+                _activeAltar = null; 
+
+                var windowManager = FindFirstObjectByType<UI_WindowManager>();
+                if (windowManager != null)
+                {
+                    windowManager.CloseAllLeftWindows();
+                    Debug.Log("Окно автоматически закрыто: игрок вышел за пределы радиуса.");
+                }
+            }
+        }
     }
+
+    public void InitializeInteraction(ServerNPCAltar altar)
+    {
+        _activeAltar = altar;
+    }
+
 
     private void OnDestroy()
     {

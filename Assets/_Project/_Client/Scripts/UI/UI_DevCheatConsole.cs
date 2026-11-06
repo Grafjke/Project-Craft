@@ -76,12 +76,12 @@ namespace ProjectCraft._Client.UI
             // 1. Автозагрузка баз данных из Resources
             if (allProjectItems.Count == 0)
             {
-                UniversalItemData[] loadedItems = Resources.LoadAll<UniversalItemData>("");
+                UniversalItemData[] loadedItems = Resources.LoadAll<UniversalItemData>("ScriptableObjects/Items");
                 allProjectItems.AddRange(loadedItems);
             }
             if (allProjectSkills.Count == 0)
             {
-                UniversalSkillData[] loadedSkills = Resources.LoadAll<UniversalSkillData>("");
+                UniversalSkillData[] loadedSkills = Resources.LoadAll<UniversalSkillData>("ScriptableObjects/Skills");
                 allProjectSkills.AddRange(loadedSkills);
             }
 

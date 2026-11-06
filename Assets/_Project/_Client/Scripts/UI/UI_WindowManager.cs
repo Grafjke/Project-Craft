@@ -34,10 +34,6 @@ public class UI_WindowManager : MonoBehaviour
         {
             ToggleLeftWindowExclusive(characterWindow);
         }
-        if (Keyboard.current.kKey.wasPressedThisFrame)
-        {
-            ToggleLeftWindowExclusive(altarWindow);
-        }
     }
 
     public void ToggleInventory()

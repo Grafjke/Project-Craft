@@ -1,36 +1,39 @@
 using UnityEngine;
+using ProjectCraft._Client.UI;
 
+namespace ProjectCraft._Server
+{
     public class ServerNPCAltar : MonoBehaviour
     {
         [Header("Interaction Settings")]
         [SerializeField] private float interactionRadius = 3.5f;
+        [SerializeField] private GameObject altarWindowPanel;
 
-        private Transform _playerTransform;
-        private bool _isPlayerNear = false;
-
-        private void Start()
+        public void Interact(ServerPlayerEntity player)
         {
-            var movementController = FindFirstObjectByType<ServerMovementController>();
-            if (movementController != null) _playerTransform = movementController.transform;
-        }
+            if (player == null) return;
 
-        private void Update()
-        {
-            if (_playerTransform == null) return;
-
-            float distance = Vector3.Distance(transform.position, _playerTransform.position);
-
-            if (distance <= interactionRadius && !_isPlayerNear)
+            float distance = Vector3.Distance(transform.position, player.transform.position);
+            if (distance > interactionRadius)
             {
-                _isPlayerNear = true;
-                // На стадии MVP шлём симуляцию открытия окна на клиент
-                Debug.Log("[NPC Altar] Игрок подошёл к алтарю! Открываем UI Алтаря Знаний.");
-                // В будущем: UI_WindowManager.Instance.OpenAltarWindow();
+                player.SendSystemMessage("Вы слишком далеко от Алтаря Душ!");
+                return;
             }
-            else if (distance > interactionRadius && _isPlayerNear)
+
+            var windowManager = FindFirstObjectByType<UI_WindowManager>();
+            if (windowManager != null && altarWindowPanel != null)
             {
-                _isPlayerNear = false;
-                Debug.Log("[NPC Altar] Игрок отошёл. Принудительно закрываем интерфейс алтаря.");
+                windowManager.ToggleLeftWindowExclusive(altarWindowPanel);
+
+                var altarController = altarWindowPanel.GetComponent<UI_AltarWindowController>();
+                if (altarController != null && altarWindowPanel.activeInHierarchy)
+                {
+                    // Передаем ссылку на этот конкретный алтарь для трекинга дистанции
+                    altarController.InitializeInteraction(this);
+                    altarController.RefreshWindow();
+                }
+
+                Debug.Log($"Игрок {player.name} успешно взаимодействовал с Алтарем.");
             }
         }
 
@@ -39,5 +42,7 @@ using UnityEngine;
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(transform.position, interactionRadius);
         }
-    }
 
+        public float InteractionRadius => interactionRadius;
+    }
+}

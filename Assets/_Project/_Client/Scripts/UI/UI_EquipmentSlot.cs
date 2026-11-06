@@ -28,32 +28,57 @@ namespace ProjectCraft._Client.UI
 
         public void Render(InventorySlot slotData)
         {
-            if (slotData.IsEmpty || slotData.itemData == null)
+            // 1. Проверяем базовую пустоту слота
+            if (slotData.IsEmpty)
             {
-                _hasItem = false; 
-                if (iconImage != null)
-                {
-                    iconImage.enabled = false;
-                    iconImage.sprite = null;
-                }
-
-                if (emptyPlaceholder != null)
-                {
-                    emptyPlaceholder.SetActive(true);
-                }
+                ClearSlot();
                 return;
             }
 
+            // 2. Адаптивно определяем спрайт (для шмота или для скиллов)
+            Sprite targetSprite = null;
+
+            if (slotData.skillData != null)
+            {
+                targetSprite = slotData.skillData.skillIcon;
+            }
+            else if (slotData.itemData != null)
+            {
+                targetSprite = slotData.itemData.itemIcon;
+            }
+
+            if (targetSprite == null)
+            {
+                ClearSlot();
+                return;
+            }
+
+     
             _hasItem = true;
             if (iconImage != null)
             {
                 iconImage.enabled = true;
-                iconImage.sprite = slotData.itemData.itemIcon;
+                iconImage.sprite = targetSprite;
             }
 
             if (emptyPlaceholder != null)
             {
                 emptyPlaceholder.SetActive(false);
+            }
+        }
+
+        private void ClearSlot()
+        {
+            _hasItem = false;
+            if (iconImage != null)
+            {
+                iconImage.enabled = false;
+                iconImage.sprite = null;
+            }
+
+            if (emptyPlaceholder != null)
+            {
+                emptyPlaceholder.SetActive(true);
             }
         }
 
