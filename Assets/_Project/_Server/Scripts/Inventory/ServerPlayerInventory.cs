@@ -181,6 +181,26 @@ namespace ProjectCraft._Server
             OnInventoryChanged?.Invoke(isSkillTab);
         }
 
+        public int GetItemCount(UniversalItemData targetItem)
+        {
+            if (targetItem == null) return 0;
+
+            int totalCount = 0;
+
+
+            for (int i = 0; i < _itemTab.Length; i++)
+            {
+                if (_itemTab[i].IsEmpty) continue;
+
+                if (_itemTab[i].itemData != null && _itemTab[i].itemData.itemID == targetItem.itemID)
+                {
+                    totalCount += _itemTab[i].count;
+                }
+            }
+
+            return totalCount;
+        }
+
 
 
     }

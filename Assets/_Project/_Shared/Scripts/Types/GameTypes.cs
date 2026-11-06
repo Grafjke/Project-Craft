@@ -33,12 +33,10 @@ namespace ProjectCraft._Shared
     }
     public enum StatType
     {
-       
         Strength,   
         Dexterity,  
         Intelligence,           
 
-       
         Crit_Chance,           
         Crit_Damage,           
         Attack_Cast_Speed,     
@@ -47,7 +45,6 @@ namespace ProjectCraft._Shared
         Shadow_Damage_Percent_Bonus,   
         Physical_Damage_Percent_Bonus,
 
-        
         Armor,                
         Fire_Resistance,       
         Lightning_Resistance,   
