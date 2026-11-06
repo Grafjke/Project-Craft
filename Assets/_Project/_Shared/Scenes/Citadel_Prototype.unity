@@ -1808,7 +1808,7 @@ MonoBehaviour:
   itemsGridParent: {fileID: 821850772}
   btnItemsTab: {fileID: 252649612}
   btnSkillsTab: {fileID: 1860941510}
-  altarWindowController: {fileID: 0}
+  altarWindowController: {fileID: 1965493619}
 --- !u!1 &574230817
 GameObject:
   m_ObjectHideFlags: 0
@@ -1934,7 +1934,9 @@ MonoBehaviour:
   inventoryWindow: {fileID: 541879467}
   leftSideWindows:
   - {fileID: 1806191918}
+  - {fileID: 1965493615}
   characterWindow: {fileID: 1806191918}
+  altarWindow: {fileID: 1965493615}
 --- !u!1 &592096417
 GameObject:
   m_ObjectHideFlags: 0
@@ -2246,6 +2248,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill_2
       objectReference: {fileID: 0}
+    - target: {fileID: 8499133134151595019, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+      propertyPath: emptyPlaceholder
+      value: 
+      objectReference: {fileID: 641994834}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2256,6 +2262,22 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1435232525743903602, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
   m_PrefabInstance: {fileID: 641994832}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &641994834 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6891764190135165379, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+  m_PrefabInstance: {fileID: 641994832}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &641994835 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8499133134151595019, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+  m_PrefabInstance: {fileID: 641994832}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77a08f9a96e1c84abbb3e521434290f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Client.UI.UI_EquipmentSlot
 --- !u!1 &694223558
 GameObject:
   m_ObjectHideFlags: 0
@@ -2971,6 +2993,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill_2
       objectReference: {fileID: 0}
+    - target: {fileID: 8499133134151595019, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+      propertyPath: emptyPlaceholder
+      value: 
+      objectReference: {fileID: 742306732}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2981,6 +3007,22 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1435232525743903602, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
   m_PrefabInstance: {fileID: 742306730}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &742306732 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6891764190135165379, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+  m_PrefabInstance: {fileID: 742306730}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &742306733 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8499133134151595019, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+  m_PrefabInstance: {fileID: 742306730}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77a08f9a96e1c84abbb3e521434290f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Client.UI.UI_EquipmentSlot
 --- !u!4 &751810750 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4581109427482222817, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
@@ -3541,6 +3583,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill_1
       objectReference: {fileID: 0}
+    - target: {fileID: 8499133134151595019, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+      propertyPath: emptyPlaceholder
+      value: 
+      objectReference: {fileID: 855994688}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3551,6 +3597,22 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1435232525743903602, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
   m_PrefabInstance: {fileID: 855994686}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &855994688 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6891764190135165379, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+  m_PrefabInstance: {fileID: 855994686}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &855994689 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8499133134151595019, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+  m_PrefabInstance: {fileID: 855994686}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77a08f9a96e1c84abbb3e521434290f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Client.UI.UI_EquipmentSlot
 --- !u!1 &929660364
 GameObject:
   m_ObjectHideFlags: 0
@@ -3949,6 +4011,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill_3
       objectReference: {fileID: 0}
+    - target: {fileID: 8499133134151595019, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+      propertyPath: emptyPlaceholder
+      value: 
+      objectReference: {fileID: 984507982}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3959,6 +4025,22 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1435232525743903602, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
   m_PrefabInstance: {fileID: 984507980}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &984507982 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6891764190135165379, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+  m_PrefabInstance: {fileID: 984507980}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &984507983 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8499133134151595019, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+  m_PrefabInstance: {fileID: 984507980}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77a08f9a96e1c84abbb3e521434290f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Client.UI.UI_EquipmentSlot
 --- !u!1 &989017233
 GameObject:
   m_ObjectHideFlags: 0
@@ -6004,6 +6086,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill_3
       objectReference: {fileID: 0}
+    - target: {fileID: 8499133134151595019, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+      propertyPath: emptyPlaceholder
+      value: 
+      objectReference: {fileID: 1531508688}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6014,6 +6100,22 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1435232525743903602, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
   m_PrefabInstance: {fileID: 1531508686}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1531508688 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6891764190135165379, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+  m_PrefabInstance: {fileID: 1531508686}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1531508689 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8499133134151595019, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+  m_PrefabInstance: {fileID: 1531508686}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77a08f9a96e1c84abbb3e521434290f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Client.UI.UI_EquipmentSlot
 --- !u!1 &1565938703
 GameObject:
   m_ObjectHideFlags: 0
@@ -6570,6 +6672,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill_0
       objectReference: {fileID: 0}
+    - target: {fileID: 8499133134151595019, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+      propertyPath: emptyPlaceholder
+      value: 
+      objectReference: {fileID: 1730823819}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6580,6 +6686,22 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1435232525743903602, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
   m_PrefabInstance: {fileID: 1730823817}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1730823819 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6891764190135165379, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+  m_PrefabInstance: {fileID: 1730823817}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1730823820 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8499133134151595019, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+  m_PrefabInstance: {fileID: 1730823817}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77a08f9a96e1c84abbb3e521434290f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Client.UI.UI_EquipmentSlot
 --- !u!1 &1754928660 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6891764190135165379, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
@@ -7708,6 +7830,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill_0
       objectReference: {fileID: 0}
+    - target: {fileID: 8499133134151595019, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+      propertyPath: emptyPlaceholder
+      value: 
+      objectReference: {fileID: 1913086355}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7718,6 +7844,22 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1435232525743903602, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
   m_PrefabInstance: {fileID: 1913086353}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1913086355 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6891764190135165379, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+  m_PrefabInstance: {fileID: 1913086353}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1913086356 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8499133134151595019, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+  m_PrefabInstance: {fileID: 1913086353}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77a08f9a96e1c84abbb3e521434290f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Client.UI.UI_EquipmentSlot
 --- !u!1 &1965493615
 GameObject:
   m_ObjectHideFlags: 0
@@ -7810,15 +7952,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI_AltarWindowController
   targetPlayer: {fileID: 0}
   activeSlotsUI:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1730823820}
+  - {fileID: 2134791380}
+  - {fileID: 641994835}
+  - {fileID: 984507983}
   passiveSlotsUI:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1913086356}
+  - {fileID: 855994689}
+  - {fileID: 742306733}
+  - {fileID: 1531508689}
 --- !u!1 &1983690686
 GameObject:
   m_ObjectHideFlags: 0
@@ -8247,6 +8389,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill_1
       objectReference: {fileID: 0}
+    - target: {fileID: 8499133134151595019, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+      propertyPath: emptyPlaceholder
+      value: 
+      objectReference: {fileID: 2134791379}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8257,6 +8403,22 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1435232525743903602, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
   m_PrefabInstance: {fileID: 2134791377}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2134791379 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6891764190135165379, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+  m_PrefabInstance: {fileID: 2134791377}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2134791380 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8499133134151595019, guid: 328496be283d1304ea88a1a452beb0e8, type: 3}
+  m_PrefabInstance: {fileID: 2134791377}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77a08f9a96e1c84abbb3e521434290f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Client.UI.UI_EquipmentSlot
 --- !u!1001 &1632192991655368433
 PrefabInstance:
   m_ObjectHideFlags: 0
