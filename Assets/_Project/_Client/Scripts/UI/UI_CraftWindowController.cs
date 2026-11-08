@@ -9,6 +9,9 @@ namespace ProjectCraft._Client.UI
 {
     public class UI_CraftWindowController : MonoBehaviour
     {
+        [Header("Systems Link")]
+        [SerializeField] private ServerCraftSystem serverCraftSystem;
+
         [Header("Global References")]
         [SerializeField] private ServerPlayerEntity targetPlayer;
 
@@ -19,16 +22,22 @@ namespace ProjectCraft._Client.UI
         [Header("Panel 3 (Recipe Inspector)")]
         [SerializeField] private Image selectedItemIcon;
         [SerializeField] private TextMeshProUGUI selectedItemDescription;
-        [SerializeField] private Transform materialsGridParent; 
+        [SerializeField] private Transform materialsGridParent;
         [SerializeField] private GameObject materialSlotPrefab;
         [SerializeField] private Button btnCreate;
 
-        
+        [Header("Cascade Panels References")]
+        [SerializeField] private GameObject panel1Categories;
+        [SerializeField] private GameObject panel2ItemsList;
+        [SerializeField] private GameObject panel3RecipeInspector;
+
+
         private Dictionary<string, List<UniversalItemData>> _recipesByCategory = new Dictionary<string, List<UniversalItemData>>();
         private List<GameObject> _spawnedItemButtons = new List<GameObject>();
         private List<GameObject> _spawnedMaterialSlots = new List<GameObject>();
 
         private UniversalItemData _currentlySelectedItem;
+
 
         private void Awake()
         {
@@ -40,7 +49,8 @@ namespace ProjectCraft._Client.UI
         private void OnEnable()
         {
             if (targetPlayer == null) targetPlayer = FindFirstObjectByType<ServerPlayerEntity>();
-            ClearInspector();
+
+            ResetToFirstCascadeStep();
         }
 
         private void LoadRecipesFromProject()
@@ -53,7 +63,6 @@ namespace ProjectCraft._Client.UI
             {
                 if (item == null) continue;
 
-                // Сортируем по папкам/категориям (используем Weapon_Or_Armor_Tag, например: "Sword", "Staff", "Plate")
                 string category = item.weaponOrArmorTag;
 
                 if (!_recipesByCategory.ContainsKey(category))
@@ -70,6 +79,9 @@ namespace ProjectCraft._Client.UI
             ClearInspector();
 
             if (!_recipesByCategory.ContainsKey(categoryName)) return;
+
+            if (panel2ItemsList != null) panel2ItemsList.SetActive(true);
+            if (panel3RecipeInspector != null) panel3RecipeInspector.SetActive(false);
 
             foreach (var recipe in _recipesByCategory[categoryName])
             {
@@ -93,6 +105,8 @@ namespace ProjectCraft._Client.UI
             ClearMaterialSlots();
             _currentlySelectedItem = item;
 
+            if (panel3RecipeInspector != null) panel3RecipeInspector.SetActive(true);
+
             if (selectedItemIcon != null)
             {
                 selectedItemIcon.enabled = true;
@@ -106,30 +120,71 @@ namespace ProjectCraft._Client.UI
                 sb.AppendLine($"Требуемый уровень: {item.requiredLevel}");
                 sb.AppendLine("\n<b>Характеристики:</b>");
 
-                foreach (var stat in item.staticStatsBlueprint)
+                if (item.staticStatsBlueprint != null)
                 {
-                    sb.AppendLine($"• {stat.statName}: +{stat.baseValue}");
+                    foreach (var stat in item.staticStatsBlueprint)
+                    {
+                        sb.AppendLine($"• {stat.statName}: +{stat.baseValue}");
+                    }
                 }
                 selectedItemDescription.text = sb.ToString();
             }
 
-            foreach (var reqMaterial in item.requiredMaterials)
+            bool canCraft = true;
+
+            if (item.requiredMaterials != null)
             {
-                GameObject matSlotGo = Instantiate(materialSlotPrefab, materialsGridParent);
+                foreach (var reqMaterial in item.requiredMaterials)
+                {
+                    GameObject matSlotGo = Instantiate(materialSlotPrefab, materialsGridParent);
+                    _spawnedMaterialSlots.Add(matSlotGo);
 
-                // Здесь будет логика UI_CraftMaterialSlot: подгрузка иконки ресурса по его ID,
-                // подсчет количества у игрока (например, "5 / 12") и покраска текста в красный, если не хватает.
+                    UI_CraftMaterialSlot materialSlot = matSlotGo.GetComponent<UI_CraftMaterialSlot>();
+                    if (materialSlot != null)
+                    {
+                        materialSlot.SetupMaterialSlot(reqMaterial, targetPlayer);
+                    }
 
-                _spawnedMaterialSlots.Add(matSlotGo);
+                    if (targetPlayer != null && targetPlayer.Inventory != null)
+                    {
+                        int currentInInventory = targetPlayer.Inventory.GetItemCount(reqMaterial.resource);
+                        if (currentInInventory < reqMaterial.count)
+                        {
+                            canCraft = false;
+                        }
+                    }
+                    else
+                    {
+                        canCraft = false;
+                    }
+                }
             }
 
-            if (btnCreate != null) btnCreate.interactable = true;
+            if (btnCreate != null)
+            {
+                bool hasLevel = targetPlayer != null && targetPlayer.CharacterLevel >= item.requiredLevel;
+                btnCreate.interactable = canCraft && hasLevel;
+            }
         }
 
         private void RequestCraft()
         {
             if (_currentlySelectedItem == null || targetPlayer == null) return;
-            Debug.Log($"Отправлен запрос на создание {_currentlySelectedItem.itemName}");
+
+            if (btnCreate != null) btnCreate.interactable = false;
+
+            if (serverCraftSystem != null)
+            {
+                Debug.Log($"Отправка запроса на создание предмета: {_currentlySelectedItem.itemName}");
+
+                serverCraftSystem.CraftItem(targetPlayer, _currentlySelectedItem);
+
+                SelectItemForCrafting(_currentlySelectedItem);
+            }
+            else
+            {
+                Debug.LogError("Ссылка на ServerCraftSystem не установлена in инспекторе Craft_Window!");
+            }
         }
 
         private void ClearItemButtons()
@@ -151,6 +206,17 @@ namespace ProjectCraft._Client.UI
             if (selectedItemDescription != null) selectedItemDescription.text = "Выберите предмет из списка...";
             if (btnCreate != null) btnCreate.interactable = false;
             ClearMaterialSlots();
+        }
+
+        public void ResetToFirstCascadeStep()
+        {
+            ClearItemButtons();
+            ClearMaterialSlots();
+            _currentlySelectedItem = null;
+
+            if (panel1Categories != null) panel1Categories.SetActive(true);
+            if (panel2ItemsList != null) panel2ItemsList.SetActive(false);
+            if (panel3RecipeInspector != null) panel3RecipeInspector.SetActive(false);
         }
     }
 }

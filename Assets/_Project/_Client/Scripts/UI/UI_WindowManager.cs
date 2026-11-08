@@ -9,14 +9,13 @@ public class UI_WindowManager : MonoBehaviour
     [Header("Left Side Windows Group")]
     [SerializeField] private GameObject[] leftSideWindows;
 
-
-
     [Header("Specific Left Windows References")]
     [SerializeField] private GameObject characterWindow;
     [SerializeField] private GameObject altarWindow;
+    [SerializeField] private GameObject craftWindow; // Ссылка на окно крафта в одном ряду с остальными
 
     private void Awake()
-    { 
+    {
         if (inventoryWindow != null) inventoryWindow.SetActive(false);
         CloseAllLeftWindows();
     }
@@ -51,8 +50,6 @@ public class UI_WindowManager : MonoBehaviour
         CloseAllLeftWindows();
 
         targetWindow.SetActive(!wasActive);
-
-       
     }
 
     public void CloseAllLeftWindows()
@@ -67,5 +64,4 @@ public class UI_WindowManager : MonoBehaviour
             }
         }
     }
-
 }

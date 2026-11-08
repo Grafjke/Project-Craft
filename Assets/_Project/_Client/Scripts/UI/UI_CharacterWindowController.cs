@@ -38,8 +38,6 @@ namespace ProjectCraft._Client.UI
 
         }
 
-
-
         private void OnEnable()
         {
             InitializeWindow();
@@ -180,5 +178,6 @@ namespace ProjectCraft._Client.UI
                 Debug.Log($"[Client UI] Предмет из слота успешно снят в инвентарь.");
             }
         }
+
     }
 }

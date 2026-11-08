@@ -200,7 +200,41 @@ namespace ProjectCraft._Server
 
             return totalCount;
         }
+        public bool RemoveItem(UniversalItemData targetItem, int count)
+        {
+            if (targetItem == null || count <= 0) return false;
 
+            bool isSkill = (targetItem.itemType == ItemType.Capsule);
+            var targetTab = isSkill ? _skillTab : _itemTab;
+
+            if (GetItemCount(targetItem) < count) return false;
+
+            for (int i = targetTab.Length - 1; i >= 0; i--)
+            {
+                if (targetTab[i].IsEmpty || targetTab[i].itemData == null) continue;
+
+                if (targetTab[i].itemData.itemID == targetItem.itemID)
+                {
+                    if (targetTab[i].count > count)
+                    {
+                        var slot = targetTab[i];
+                        slot.count -= count;
+                        targetTab[i] = slot;
+                        count = 0;
+                        break;
+                    }
+                    else
+                    {
+                        count -= targetTab[i].count;
+                        targetTab[i] = default;
+                    }
+                }
+                if (count <= 0) break;
+            }
+
+            OnInventoryChanged?.Invoke(isSkill);
+            return true;
+        }
 
 
     }

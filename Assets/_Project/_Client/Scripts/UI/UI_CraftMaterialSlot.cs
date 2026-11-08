@@ -16,7 +16,7 @@ namespace ProjectCraft._Client.UI
         [SerializeField] private Color normalColor = Color.white;
         [SerializeField] private Color missingColor = Color.red; // Красный, если материалов не хватает
 
- 
+
         public void SetupMaterialSlot(ResourceCost costData, ServerPlayerEntity player)
         {
             if (costData.resource == null || player == null || player.Inventory == null)
@@ -50,3 +50,6 @@ namespace ProjectCraft._Client.UI
         }
     }
 }
+
+
+       
