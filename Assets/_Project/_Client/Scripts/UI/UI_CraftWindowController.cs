@@ -128,14 +128,14 @@ namespace ProjectCraft._Client.UI
             {
                 GameObject btnGo = Instantiate(itemButtonPrefab, itemsGridParent);
 
-                var textComponent = btnGo.GetComponentInChildren<TextMeshProUGUI>();
-                if (textComponent != null) textComponent.text = recipe.itemName;
-
-                var btn = btnGo.GetComponent<Button>();
-                if (btn != null)
+                UI_CraftItemButton craftButton = btnGo.GetComponent<UI_CraftItemButton>();
+                if (craftButton != null)
                 {
-                    btn.onClick.RemoveAllListeners();
-                    btn.onClick.AddListener(() => SelectItemForCrafting(recipe));
+                    craftButton.SetupButton(recipe, () => SelectItemForCrafting(recipe));
+                }
+                else
+                {
+                    Debug.LogError($"[CraftUI] На префабе {itemButtonPrefab.name} отсутствует компонент UI_CraftItemButton!");
                 }
 
                 _spawnedItemButtons.Add(btnGo);
@@ -273,7 +273,6 @@ namespace ProjectCraft._Client.UI
             if (panel1Categories != null) panel1Categories.SetActive(true);
             if (panel2ItemsList != null) panel2ItemsList.SetActive(false);
             if (panel3RecipeInspector != null) panel3RecipeInspector.SetActive(false);
-
             LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
         }
     }

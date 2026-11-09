@@ -40,16 +40,6 @@ public class ClientInputController : MonoBehaviour
             TryInteractWithNearestNPC();
         }
 
-        if (Keyboard.current != null && Keyboard.current.cKey.wasPressedThisFrame)
-        {
-            var windowManager = FindFirstObjectByType<UI_WindowManager>();
-
-            if (windowManager != null && windowManager.characterWindow != null)
-            {
-                windowManager.ToggleLeftWindowExclusive(windowManager.characterWindow);
-
-            }
-        }
 
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
         {
