@@ -31,6 +31,8 @@ namespace ProjectCraft._Client.UI
         [SerializeField] private GameObject panel2ItemsList;
         [SerializeField] private GameObject panel3RecipeInspector;
 
+        private ServerNPCBlacksmith _currentBlacksmithContext;
+
 
         private Dictionary<string, List<UniversalItemData>> _recipesByCategory = new Dictionary<string, List<UniversalItemData>>();
         private List<GameObject> _spawnedItemButtons = new List<GameObject>();
@@ -38,6 +40,10 @@ namespace ProjectCraft._Client.UI
 
         private UniversalItemData _currentlySelectedItem;
 
+        public void InitializeInteraction(ServerNPCBlacksmith blacksmith)
+        {
+            _currentBlacksmithContext = blacksmith;
+        }
 
         private void Awake()
         {
@@ -45,12 +51,47 @@ namespace ProjectCraft._Client.UI
 
             if (btnCreate != null) btnCreate.onClick.AddListener(RequestCraft);
         }
+        private void Update()
+        {
+            // Если контекста кузнеца нет, ничего не считаем
+            if (_currentBlacksmithContext == null) return;
+
+            // Если игрока нет, пробуем найти его на сцене динамически
+            if (targetPlayer == null)
+            {
+                targetPlayer = FindFirstObjectByType<ServerPlayerEntity>();
+            }
+
+            if (targetPlayer != null)
+            {
+                float distance = Vector3.Distance(targetPlayer.transform.position, _currentBlacksmithContext.transform.position);
+
+                // Если игрок отошел дальше радиуса взаимодействия кузнеца + небольшой запас
+                if (distance > (_currentBlacksmithContext.InteractionRadius + 0.5f))
+                {
+                    Debug.Log($"[CraftUI] Игрок отошел слишком далеко ({distance:F1}м). Автоматическое закрытие окна крафта.");
+
+                    var windowManager = FindFirstObjectByType<UI_WindowManager>();
+                    if (windowManager != null)
+                    {
+                        windowManager.CloseAllLeftWindows();
+                    }
+
+                    _currentBlacksmithContext = null;
+                }
+            }
+        }
 
         private void OnEnable()
         {
             if (targetPlayer == null) targetPlayer = FindFirstObjectByType<ServerPlayerEntity>();
 
             ResetToFirstCascadeStep();
+        }
+
+        private void OnDisable()
+        {
+            _currentBlacksmithContext = null;
         }
 
         private void LoadRecipesFromProject()
@@ -93,11 +134,19 @@ namespace ProjectCraft._Client.UI
                 var btn = btnGo.GetComponent<Button>();
                 if (btn != null)
                 {
+                    btn.onClick.RemoveAllListeners();
                     btn.onClick.AddListener(() => SelectItemForCrafting(recipe));
                 }
 
                 _spawnedItemButtons.Add(btnGo);
             }
+
+            if (itemsGridParent != null)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(itemsGridParent.GetComponent<RectTransform>());
+            }
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
         }
 
         public void SelectItemForCrafting(UniversalItemData item)
@@ -158,6 +207,11 @@ namespace ProjectCraft._Client.UI
                         canCraft = false;
                     }
                 }
+                if (materialsGridParent != null)
+                {
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(materialsGridParent.GetComponent<RectTransform>());
+                }
+                LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
             }
 
             if (btnCreate != null)
@@ -212,11 +266,15 @@ namespace ProjectCraft._Client.UI
         {
             ClearItemButtons();
             ClearMaterialSlots();
+            ClearInspector();
+
             _currentlySelectedItem = null;
 
             if (panel1Categories != null) panel1Categories.SetActive(true);
             if (panel2ItemsList != null) panel2ItemsList.SetActive(false);
             if (panel3RecipeInspector != null) panel3RecipeInspector.SetActive(false);
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
         }
     }
 }

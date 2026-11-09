@@ -19,6 +19,7 @@ public class ClientInputController : MonoBehaviour
 
     private ServerPlayerEntity _localPlayer;
 
+    
 
     void Start()
     {
@@ -28,6 +29,28 @@ public class ClientInputController : MonoBehaviour
 
     void Update()
     {
+        
+        if (Keyboard.current != null && Keyboard.current.tabKey.wasPressedThisFrame)
+        {
+            if (serverTarget != null) serverTarget.SelectTargetViaTab();
+        }
+
+        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            TryInteractWithNearestNPC();
+        }
+
+        if (Keyboard.current != null && Keyboard.current.cKey.wasPressedThisFrame)
+        {
+            var windowManager = FindFirstObjectByType<UI_WindowManager>();
+
+            if (windowManager != null && windowManager.characterWindow != null)
+            {
+                windowManager.ToggleLeftWindowExclusive(windowManager.characterWindow);
+
+            }
+        }
+
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
         {
             return;
@@ -42,26 +65,16 @@ public class ClientInputController : MonoBehaviour
         {
             TrySelectTargetUnderCursor();
         }
-
-        if (Keyboard.current != null && Keyboard.current.tabKey.wasPressedThisFrame)
-        {
-            if (serverTarget != null)
-            {
-                serverTarget.SelectTargetViaTab();
-            }
-        }
-        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
-        {
-            TryInteractWithNearestNPC();
-        }
     }
     private void TryInteractWithNearestNPC()
     {
         if (_localPlayer == null) return;
 
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, 5f);
-        ServerNPCAltar closestAltar = null;
+
+        MonoBehaviour closestInteractable = null;
         float closestDistance = Mathf.Infinity;
+        string npcType = "";
 
         foreach (var hitCollider in hitColliders)
         {
@@ -69,18 +82,38 @@ public class ClientInputController : MonoBehaviour
             if (altar != null)
             {
                 float distance = Vector3.Distance(transform.position, altar.transform.position);
-
                 if (distance <= altar.InteractionRadius && distance < closestDistance)
                 {
                     closestDistance = distance;
-                    closestAltar = altar;
+                    closestInteractable = altar;
+                    npcType = "Altar";
+                }
+                continue;
+            }
+
+            ServerNPCBlacksmith blacksmith = hitCollider.GetComponent<ServerNPCBlacksmith>();
+            if (blacksmith != null)
+            {
+                float distance = Vector3.Distance(transform.position, blacksmith.transform.position);
+                if (distance <= blacksmith.InteractionRadius && distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestInteractable = blacksmith;
+                    npcType = "Blacksmith";
                 }
             }
         }
 
-        if (closestAltar != null)
+        if (closestInteractable != null)
         {
-            closestAltar.Interact(_localPlayer);
+            if (npcType == "Altar" && closestInteractable is ServerNPCAltar targetAltar)
+            {
+                targetAltar.Interact(_localPlayer);
+            }
+            else if (npcType == "Blacksmith" && closestInteractable is ServerNPCBlacksmith targetBlacksmith)
+            {
+                targetBlacksmith.Interact(_localPlayer);
+            }
         }
     }
 

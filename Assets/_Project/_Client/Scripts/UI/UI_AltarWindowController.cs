@@ -35,8 +35,6 @@ public class UI_AltarWindowController : MonoBehaviour, IItemSlotClickHandler
             EnsurePlayerConnection();
             return;
         }
-
-        // РЕАКТИВНЫЙ МОНИТОРИНГ: Работает только когда окно открыто на экране
         if (_activeAltar != null && targetPlayer != null)
         {
             float distance = Vector3.Distance(targetPlayer.transform.position, _activeAltar.transform.position);
@@ -49,7 +47,6 @@ public class UI_AltarWindowController : MonoBehaviour, IItemSlotClickHandler
                 if (windowManager != null)
                 {
                     windowManager.CloseAllLeftWindows();
-                    Debug.Log("Окно автоматически закрыто: игрок вышел за пределы радиуса.");
                 }
             }
         }

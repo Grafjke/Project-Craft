@@ -10,9 +10,14 @@ public class UI_WindowManager : MonoBehaviour
     [SerializeField] private GameObject[] leftSideWindows;
 
     [Header("Specific Left Windows References")]
-    [SerializeField] private GameObject characterWindow;
-    [SerializeField] private GameObject altarWindow;
-    [SerializeField] private GameObject craftWindow; // Ссылка на окно крафта в одном ряду с остальными
+    [SerializeField] private GameObject _characterWindow;
+    [SerializeField] private GameObject _altarWindow;
+    [SerializeField] private GameObject _craftWindow;
+
+    public GameObject characterWindow => _characterWindow;
+    public GameObject altarWindow => _altarWindow;
+    public GameObject craftWindow => _craftWindow;
+
 
     private void Awake()
     {
@@ -31,7 +36,7 @@ public class UI_WindowManager : MonoBehaviour
 
         if (Keyboard.current.cKey.wasPressedThisFrame)
         {
-            ToggleLeftWindowExclusive(characterWindow);
+            ToggleLeftWindowExclusive(_characterWindow);
         }
     }
 
@@ -43,12 +48,23 @@ public class UI_WindowManager : MonoBehaviour
 
     public void ToggleLeftWindowExclusive(GameObject targetWindow)
     {
-        if (targetWindow == null) return;
+        if (targetWindow == null)
+        {
+            return;
+        }
 
         bool wasActive = targetWindow.activeSelf;
 
-        CloseAllLeftWindows();
-
+        if (leftSideWindows != null)
+        {
+            for (int i = 0; i < leftSideWindows.Length; i++)
+            {
+                if (leftSideWindows[i] != null)
+                {
+                    leftSideWindows[i].SetActive(false);
+                }
+            }
+        }
         targetWindow.SetActive(!wasActive);
     }
 

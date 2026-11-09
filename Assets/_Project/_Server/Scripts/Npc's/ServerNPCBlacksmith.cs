@@ -16,30 +16,30 @@ namespace ProjectCraft._Server
             float distance = Vector3.Distance(transform.position, player.transform.position);
             if (distance > interactionRadius)
             {
-                player.SendSystemMessage("Вы слишком далеко от Кузнеца!");
                 return;
             }
 
             var windowManager = FindFirstObjectByType<UI_WindowManager>();
             if (windowManager != null && craftWindowPanel != null)
             {
+                var craftController = craftWindowPanel.GetComponent<UI_CraftWindowController>();
+
                 windowManager.ToggleLeftWindowExclusive(craftWindowPanel);
 
-                var craftController = craftWindowPanel.GetComponent<UI_CraftWindowController>();
-                if (craftController != null && craftWindowPanel.activeInHierarchy)
+                if (craftWindowPanel.activeInHierarchy)
                 {
-
-                    craftController.ResetToFirstCascadeStep();
-
+                    if (craftController != null)
+                    {
+                        craftController.InitializeInteraction(this);
+                        craftController.ResetToFirstCascadeStep();
+                    }
                 }
-
-                Debug.Log($"Игрок {player.name} успешно взаимодействовал с Кузнецом.");
             }
         }
 
         private void OnDrawGizmosSelected()
         {
-            Gizmos.color = Color.orange; // Оранжевый цвет гизов для Кузнеца
+            Gizmos.color = Color.orange;
             Gizmos.DrawWireSphere(transform.position, interactionRadius);
         }
 
