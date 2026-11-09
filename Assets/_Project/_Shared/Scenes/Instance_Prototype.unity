@@ -246,94 +246,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
---- !u!1 &257255857 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6349225289966411016, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-  m_PrefabInstance: {fileID: 1526309264}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1264579642 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4581109427482222817, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-  m_PrefabInstance: {fileID: 1526309264}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1264579646
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 257255857}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4e93e952d9e8604bac7672c222a04e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ServerTargetController
-  currentTarget: {fileID: 0}
-  maxTargetDistance: 25
---- !u!1001 &1526309264
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2560915760025840126, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-      propertyPath: serverTarget
-      value: 
-      objectReference: {fileID: 1264579646}
-    - target: {fileID: 4581109427482222817, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4581109427482222817, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4581109427482222817, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4581109427482222817, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4581109427482222817, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4581109427482222817, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4581109427482222817, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4581109427482222817, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4581109427482222817, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4581109427482222817, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6349225289966411016, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-      propertyPath: m_Name
-      value: Player_Server
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6349225289966411016, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1264579646}
-  m_SourcePrefab: {fileID: 100100000, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
 --- !u!1 &1602098698
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,7 +504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4895dfeb1fb4c4b4d97d4f450f90c8a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IsometricCameraFollow
-  target: {fileID: 1264579642}
+  target: {fileID: 0}
   offset: {x: -10, y: 10, z: -10}
   smoothTime: 0.3
 --- !u!114 &1731011240
@@ -792,5 +704,4 @@ SceneRoots:
   - {fileID: 1731011238}
   - {fileID: 135562177}
   - {fileID: 2116427630}
-  - {fileID: 1526309264}
   - {fileID: 1602098702}

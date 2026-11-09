@@ -25,6 +25,7 @@ public class ServerPlayerEntity : MonoBehaviour
         Equipment = new ServerPlayerEquipment(this);
         Skills = gameObject.AddComponent<ServerPlayerSkills>();
         ResetStatsToDefault();
+        DontDestroyOnLoad(gameObject);
     }
     private void ResetStatsToDefault()
     {

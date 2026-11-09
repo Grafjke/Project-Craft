@@ -92,6 +92,17 @@ public class ClientInputController : MonoBehaviour
                     npcType = "Blacksmith";
                 }
             }
+            ServerNPCPortalKeeper portalKeeper = hitCollider.GetComponent<ServerNPCPortalKeeper>();
+            if (portalKeeper != null)
+            {
+                float distance = Vector3.Distance(transform.position, portalKeeper.transform.position);
+                if (distance <= portalKeeper.InteractionRadius && distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestInteractable = portalKeeper;
+                    npcType = "PortalKeeper";
+                }
+            }
         }
 
         if (closestInteractable != null)
@@ -103,6 +114,10 @@ public class ClientInputController : MonoBehaviour
             else if (npcType == "Blacksmith" && closestInteractable is ServerNPCBlacksmith targetBlacksmith)
             {
                 targetBlacksmith.Interact(_localPlayer);
+            }
+            else if (npcType == "PortalKeeper" && closestInteractable is ServerNPCPortalKeeper targetPortal)
+            {
+                targetPortal.Interact(_localPlayer);
             }
         }
     }
