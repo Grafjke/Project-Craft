@@ -24,6 +24,7 @@ public class ClientInputController : MonoBehaviour
     void Start()
     {
         _localPlayer = GetComponent<ServerPlayerEntity>();
+        // Больше не кэшируем камеру жестко в Start, так как она уничтожится при смене сцены
         _mainCamera = Camera.main;
     }
 
@@ -124,6 +125,11 @@ public class ClientInputController : MonoBehaviour
 
     private void SendMovementRequest()
     {
+        if (_mainCamera == null)
+        {
+            _mainCamera = Camera.main;
+            if (_mainCamera == null) return;
+        }
 
         Vector2 mousePosition = Mouse.current.position.ReadValue();
 
@@ -142,6 +148,14 @@ public class ClientInputController : MonoBehaviour
 
     private void TrySelectTargetUnderCursor()
     {
+
+        if (_mainCamera == null)
+        {
+            _mainCamera = Camera.main;
+            if (_mainCamera == null) return;
+        }
+
+
         Vector2 mousePosition = Mouse.current.position.ReadValue();
         Ray ray = _mainCamera.ScreenPointToRay(mousePosition);
 

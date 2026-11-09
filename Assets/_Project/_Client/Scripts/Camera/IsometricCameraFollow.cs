@@ -2,9 +2,8 @@ using UnityEngine;
 
 public class IsometricCameraFollow : MonoBehaviour
 {
-
     [Header("Target to Follow")]
-    [SerializeField] private Transform target; 
+    [SerializeField] private Transform target;
 
     [Header("Camera Offset")]
     [SerializeField] private Vector3 offset = new Vector3(-10f, 10f, -10f);
@@ -16,15 +15,26 @@ public class IsometricCameraFollow : MonoBehaviour
 
     void LateUpdate()
     {
-        if (target == null) return;
+        if (target == null)
+        {
+            var playerMovement = FindFirstObjectByType<ServerMovementController>();
+            if (playerMovement != null)
+            {
+                target = playerMovement.transform;
+                Debug.Log($"[Camera] Камера изометрии успешно захватила цель: {target.name}");
+            }
+            else
+            {
+                return; 
+            }
+        }
 
-        
         Vector3 targetPosition = target.position + offset;
 
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref _currentVelocity, smoothTime);
-       
     }
 }
+
 
 
 

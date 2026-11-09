@@ -25,9 +25,6 @@ namespace ProjectCraft._Server
             _agent = GetComponent<NavMeshAgent>();
             _startPosition = transform.position;
 
-            var player = FindObjectOfType<ServerMovementController>();
-            if (player != null) _playerTransform = player.transform;
-
             if (enemyData == null)
             {
                 Debug.LogError($"На объекте {name} отсутствует EnemyData!");
@@ -36,7 +33,20 @@ namespace ProjectCraft._Server
 
         void Update()
         {
-            if (_playerTransform == null || enemyData == null) return;
+            if (enemyData == null) return;
+
+            if (_playerTransform == null)
+            {
+                var playerController = FindFirstObjectByType<ServerMovementController>();
+                if (playerController != null)
+                {
+                    _playerTransform = playerController.transform;
+                }
+                else
+                {
+                    return;
+                }
+            }
 
             float distanceToPlayer = Vector3.Distance(transform.position, _playerTransform.position);
 
@@ -47,12 +57,18 @@ namespace ProjectCraft._Server
                     break;
 
                 case AIState.Chasing:
-                    _agent.SetDestination(_playerTransform.position);
+                    if (_agent.isOnNavMesh)
+                    {
+                        _agent.SetDestination(_playerTransform.position);
+                    }
                     if (distanceToPlayer > enemyData.evadeRadius) StartReturning();
                     break;
 
                 case AIState.Returning:
-                    if (Vector3.Distance(transform.position, _startPosition) <= _agent.stoppingDistance + 0.5f) ResetToIdle();
+                    if (_agent.isOnNavMesh)
+                    {
+                        if (Vector3.Distance(transform.position, _startPosition) <= _agent.stoppingDistance + 0.5f) ResetToIdle();
+                    }
                     break;
             }
         }
