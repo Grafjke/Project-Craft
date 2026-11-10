@@ -26,7 +26,6 @@ public class ServerMovementController : MonoBehaviour
         if (spawnPoint != null)
         {
             TeleportToPosition(spawnPoint.transform.position);
-            Debug.Log($"[Movement] Игрок успешно телепортирован на точку спавна новой сцены: {scene.name}");
         }
         else
         {

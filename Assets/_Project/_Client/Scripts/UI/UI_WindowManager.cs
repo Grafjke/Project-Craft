@@ -1,8 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using ProjectCraft._Shared;
+using ProjectCraft._Client.UI;
 
 public class UI_WindowManager : MonoBehaviour
 {
+    public static UI_WindowManager Instance { get; private set; }
+
     [Header("Right Side Window")]
     [SerializeField] private GameObject inventoryWindow;
 
@@ -18,11 +23,32 @@ public class UI_WindowManager : MonoBehaviour
     public GameObject altarWindow => _altarWindow;
     public GameObject craftWindow => _craftWindow;
 
-
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
         if (inventoryWindow != null) inventoryWindow.SetActive(false);
         CloseAllLeftWindows();
+
+        OptimizeUIForCurrentScene();
+    }
+
+    private void OptimizeUIForCurrentScene()
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+
+        if (currentSceneName != "Citadel_Prototype")
+        {
+            Debug.Log($"[UI Optimizer] Локация '{currentSceneName}' — боевая. Уничтожаем окна Цитадели.");
+            if (_altarWindow != null) Destroy(_altarWindow);
+            if (_craftWindow != null) Destroy(_craftWindow);
+        }
     }
 
     private void Update()
@@ -36,7 +62,38 @@ public class UI_WindowManager : MonoBehaviour
 
         if (Keyboard.current.cKey.wasPressedThisFrame)
         {
-            ToggleLeftWindowExclusive(_characterWindow);
+            if (_characterWindow != null) ToggleLeftWindowExclusive(_characterWindow);
+        }
+    }
+
+    public GameObject GetWindowByType(UIWindowType type)
+    {
+        return type switch
+        {
+            UIWindowType.Character => _characterWindow,
+            UIWindowType.Craft => _craftWindow,
+            UIWindowType.Altar => _altarWindow,
+            _ => null
+        };
+    }
+
+    public void OpenWindowForNPC(GameObject targetWindow, MonoBehaviour npcSource)
+    {
+        if (targetWindow == null)
+        {
+            Debug.LogWarning($"Окно для {npcSource.name} недоступно на этой сцене!");
+            return;
+        }
+
+        ToggleLeftWindowExclusive(targetWindow);
+
+        if (targetWindow.activeInHierarchy)
+        {
+            var interactableWindow = targetWindow.GetComponent<IInteractableUIWindow>();
+            if (interactableWindow != null)
+            {
+                interactableWindow.OnUIWindowOpened(npcSource);
+            }
         }
     }
 
@@ -48,10 +105,7 @@ public class UI_WindowManager : MonoBehaviour
 
     public void ToggleLeftWindowExclusive(GameObject targetWindow)
     {
-        if (targetWindow == null)
-        {
-            return;
-        }
+        if (targetWindow == null) return;
 
         bool wasActive = targetWindow.activeSelf;
 

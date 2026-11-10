@@ -63,63 +63,28 @@ public class ClientInputController : MonoBehaviour
 
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, 5f);
 
-        MonoBehaviour closestInteractable = null;
+        IInteractable closestInteractable = null;
         float closestDistance = Mathf.Infinity;
-        string npcType = "";
 
         foreach (var hitCollider in hitColliders)
         {
-            ServerNPCAltar altar = hitCollider.GetComponent<ServerNPCAltar>();
-            if (altar != null)
-            {
-                float distance = Vector3.Distance(transform.position, altar.transform.position);
-                if (distance <= altar.InteractionRadius && distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestInteractable = altar;
-                    npcType = "Altar";
-                }
-                continue;
-            }
 
-            ServerNPCBlacksmith blacksmith = hitCollider.GetComponent<ServerNPCBlacksmith>();
-            if (blacksmith != null)
+            var interactable = hitCollider.GetComponent<IInteractable>();
+            if (interactable == null) continue;
+
+            float distance = Vector3.Distance(transform.position, interactable.Position);
+
+
+            if (distance <= interactable.InteractionRadius && distance < closestDistance)
             {
-                float distance = Vector3.Distance(transform.position, blacksmith.transform.position);
-                if (distance <= blacksmith.InteractionRadius && distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestInteractable = blacksmith;
-                    npcType = "Blacksmith";
-                }
-            }
-            ServerNPCPortalKeeper portalKeeper = hitCollider.GetComponent<ServerNPCPortalKeeper>();
-            if (portalKeeper != null)
-            {
-                float distance = Vector3.Distance(transform.position, portalKeeper.transform.position);
-                if (distance <= portalKeeper.InteractionRadius && distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestInteractable = portalKeeper;
-                    npcType = "PortalKeeper";
-                }
+                closestDistance = distance;
+                closestInteractable = interactable;
             }
         }
 
         if (closestInteractable != null)
         {
-            if (npcType == "Altar" && closestInteractable is ServerNPCAltar targetAltar)
-            {
-                targetAltar.Interact(_localPlayer);
-            }
-            else if (npcType == "Blacksmith" && closestInteractable is ServerNPCBlacksmith targetBlacksmith)
-            {
-                targetBlacksmith.Interact(_localPlayer);
-            }
-            else if (npcType == "PortalKeeper" && closestInteractable is ServerNPCPortalKeeper targetPortal)
-            {
-                targetPortal.Interact(_localPlayer);
-            }
+            closestInteractable.Interact(_localPlayer);
         }
     }
 

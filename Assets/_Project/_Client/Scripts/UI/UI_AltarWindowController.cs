@@ -3,7 +3,7 @@ using ProjectCraft._Server;
 using ProjectCraft._Shared;
 using UnityEngine;
 
-public class UI_AltarWindowController : MonoBehaviour, IItemSlotClickHandler
+public class UI_AltarWindowController : MonoBehaviour, IItemSlotClickHandler, IInteractableUIWindow
 {
 
 
@@ -20,6 +20,14 @@ public class UI_AltarWindowController : MonoBehaviour, IItemSlotClickHandler
     private void Start()
     {
         EnsurePlayerConnection();
+    }
+    public void OnUIWindowOpened(MonoBehaviour npcSource)
+    {
+        if (npcSource is ServerNPCAltar altar)
+        {
+            InitializeInteraction(altar);
+            RefreshWindow();
+        }
     }
 
     private void OnEnable()

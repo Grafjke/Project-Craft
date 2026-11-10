@@ -7,7 +7,7 @@ using ProjectCraft._Shared;
 
 namespace ProjectCraft._Client.UI
 {
-    public class UI_CraftWindowController : MonoBehaviour
+    public class UI_CraftWindowController : MonoBehaviour, IInteractableUIWindow
     {
         [Header("Systems Link")]
         [SerializeField] private ServerCraftSystem serverCraftSystem;
@@ -51,6 +51,14 @@ namespace ProjectCraft._Client.UI
 
             if (btnCreate != null) btnCreate.onClick.AddListener(RequestCraft);
         }
+        public void OnUIWindowOpened(MonoBehaviour npcSource)
+        {
+            if (npcSource is ServerNPCBlacksmith blacksmith)
+            {
+                InitializeInteraction(blacksmith);
+                ResetToFirstCascadeStep();
+            }
+        }
         private void Update()
         {
             // Если контекста кузнеца нет, ничего не считаем
@@ -66,11 +74,9 @@ namespace ProjectCraft._Client.UI
             {
                 float distance = Vector3.Distance(targetPlayer.transform.position, _currentBlacksmithContext.transform.position);
 
-                // Если игрок отошел дальше радиуса взаимодействия кузнеца + небольшой запас
+                // Если игрок отошел дальше радиуса взаимодействия кузнеца
                 if (distance > (_currentBlacksmithContext.InteractionRadius + 0.5f))
                 {
-                    Debug.Log($"[CraftUI] Игрок отошел слишком далеко ({distance:F1}м). Автоматическое закрытие окна крафта.");
-
                     var windowManager = FindFirstObjectByType<UI_WindowManager>();
                     if (windowManager != null)
                     {

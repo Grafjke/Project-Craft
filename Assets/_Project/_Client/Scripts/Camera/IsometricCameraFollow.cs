@@ -21,7 +21,6 @@ public class IsometricCameraFollow : MonoBehaviour
             if (playerMovement != null)
             {
                 target = playerMovement.transform;
-                Debug.Log($"[Camera] Камера изометрии успешно захватила цель: {target.name}");
             }
             else
             {

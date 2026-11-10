@@ -63,4 +63,12 @@ namespace ProjectCraft._Shared
         Epic,
         Legendary
     }
+
+    public enum UIWindowType
+    {
+        Character,
+        Inventory,
+        Craft,
+        Altar
+    }
 }
