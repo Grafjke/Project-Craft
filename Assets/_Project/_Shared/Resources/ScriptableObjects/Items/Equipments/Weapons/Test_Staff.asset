@@ -22,6 +22,13 @@ MonoBehaviour:
   handednessType: 1
   weaponOrArmorTag: Staff
   requiredLevel: 1
+  attackType: 1
+  damageType: 1
+  scalingAttribute: 3
+  baseWeaponDamage: 10
+  attackRange: 15
+  baseAttackCooldown: 1.5
+  projectilePrefab: {fileID: 0}
   maxStackValue: 1
   staticStatsBlueprint:
   - statName: 2
@@ -29,3 +36,4 @@ MonoBehaviour:
   - statName: 5
     baseValue: 5
   requiredMaterials: []
+  containedSkills: []

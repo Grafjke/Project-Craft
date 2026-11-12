@@ -1,5 +1,6 @@
 using ProjectCraft._Server;
 using UnityEngine;
+using System;
 
 public class ServerTargetController : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class ServerTargetController : MonoBehaviour
     [Header("Targeting Settings")]
     [SerializeField] private float maxTargetDistance = 25f;
 
-    
+    public event Action<Transform> OnTargetChanged;
     public void SetTarget(Transform newTarget)
     {
         if (newTarget == null)
@@ -25,6 +26,7 @@ public class ServerTargetController : MonoBehaviour
             currentTarget = damageable.Transform;
             string targetName = (damageable is ServerEnemyEntity enemy) ? enemy.EntityName : currentTarget.name;
             Debug.Log($"Цель успешно захвачена: {targetName}");
+            OnTargetChanged?.Invoke(currentTarget);
         }
     }
 
@@ -66,8 +68,10 @@ public class ServerTargetController : MonoBehaviour
         if (currentTarget != null)
         {
             currentTarget = null;
+            OnTargetChanged?.Invoke(null);
             Debug.Log("Цель сброшена");
         }
+        
     }
 
 

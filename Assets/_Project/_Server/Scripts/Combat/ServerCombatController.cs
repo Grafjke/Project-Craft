@@ -65,9 +65,10 @@ namespace ProjectCraft._Server
 
             if (_targetController.currentTarget != null)
             {
+                _movementController.StopMovement();
+
                 _isAutoAttackActive = true;
                 _isChasingTarget = true;
-                Debug.Log("[Combat] Режим автоатаки и преследования цели активирован (Space).");
             }
         }
         public void OnManualMovementCommand()
@@ -107,7 +108,10 @@ namespace ProjectCraft._Server
             if (_isChasingTarget)
             {
                 _movementController.StopMovement();
+                _isChasingTarget = false;
             }
+
+            if (_movementController.IsMoving) return;
 
             Vector3 lookDir = (target.Transform.position - transform.position).normalized;
             lookDir.y = 0f;
