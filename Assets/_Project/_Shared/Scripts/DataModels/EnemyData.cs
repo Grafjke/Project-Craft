@@ -5,7 +5,7 @@ namespace ProjectCraft._Shared
     [CreateAssetMenu(fileName = "NewEnemyData", menuName = "GDD/Enemy Data")]
     public class EnemyData : ScriptableObject
     {
-       
+
         [Header("Meta Info")]
         public string enemyID;
         public string enemyName;
@@ -16,8 +16,13 @@ namespace ProjectCraft._Shared
         public float chaseSpeed = 4.5f;
         public float returnSpeed = 3.5f;
 
-        [Header("Stats Blueprint (MVP)")]
+        [Header("Combat & Stats Blueprint")]
         public int maxHealth = 100;
         public int baseDamage = 10;
+        public float attackRange = 2.0f;
+        public float attackCooldown = 1.5f;
+        public float armor = 0f;
+        public float elementalResistance = 0f;
     }
 }
+

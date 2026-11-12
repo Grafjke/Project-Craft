@@ -2,107 +2,176 @@ using ProjectCraft._Shared;
 using UnityEngine;
 using UnityEngine.AI;
 
-
 namespace ProjectCraft._Server
 {
     [RequireComponent(typeof(NavMeshAgent))]
+    [RequireComponent(typeof(ServerEnemyEntity))]
     public class ServerEnemyAI : MonoBehaviour
     {
         public enum AIState { Idle, Chasing, Returning }
-
-        [Header("Linked Data Blueprint")]
-        [SerializeField] private EnemyData enemyData;
 
         [Header("Current AI State")]
         [SerializeField] private AIState currentState = AIState.Idle;
 
         private NavMeshAgent _agent;
-        private Transform _playerTransform;
+        private ServerEnemyEntity _entity;
+        private EnemyData _data;
+        private IDamageable _targetPlayer;
         private Vector3 _startPosition;
+        private float _attackTimer;
 
-        void Start()
+        private void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
+            _entity = GetComponent<ServerEnemyEntity>();
+        }
+
+        private void Start()
+        {
+            _data = _entity.Data;
             _startPosition = transform.position;
 
-            if (enemyData == null)
+            if (_data == null)
             {
-                Debug.LogError($"На объекте {name} отсутствует EnemyData!");
+                Debug.LogError($"На объекте {name} отсутствует EnemyData в ServerEnemyEntity!");
+                return;
+            }
+
+            _entity.OnDamageTaken += HandleDamageTaken;
+            _entity.OnEnemyDied += HandleDeath;
+        }
+
+        private void OnDestroy()
+        {
+            if (_entity != null)
+            {
+                _entity.OnDamageTaken -= HandleDamageTaken;
+                _entity.OnEnemyDied -= HandleDeath;
             }
         }
 
-        void Update()
+        private void Update()
         {
-            if (enemyData == null) return;
+            if (_data == null || _entity.IsDead) return;
 
-            if (_playerTransform == null)
+            if (_targetPlayer == null)
             {
-                var playerController = FindFirstObjectByType<ServerMovementController>();
-                if (playerController != null)
-                {
-                    _playerTransform = playerController.transform;
-                }
-                else
-                {
-                    return;
-                }
+                var player = FindFirstObjectByType<ServerPlayerEntity>();
+                if (player != null) _targetPlayer = player;
+                else return;
             }
 
-            float distanceToPlayer = Vector3.Distance(transform.position, _playerTransform.position);
+            if (_attackTimer > 0f) _attackTimer -= Time.deltaTime;
+
+            float distanceToPlayer = Vector3.Distance(transform.position, _targetPlayer.Transform.position);
+            float distanceFromSpawn = Vector3.Distance(transform.position, _startPosition);
 
             switch (currentState)
             {
                 case AIState.Idle:
-                    if (distanceToPlayer <= enemyData.aggroRadius) StartChasing();
+                    if (!_targetPlayer.IsDead && distanceToPlayer <= _data.aggroRadius)
+                    {
+                        StartChasing();
+                    }
                     break;
 
                 case AIState.Chasing:
-                    if (_agent.isOnNavMesh)
+                    if (_targetPlayer.IsDead || distanceFromSpawn > _data.evadeRadius)
                     {
-                        _agent.SetDestination(_playerTransform.position);
+                        StartReturning();
+                        return;
                     }
-                    if (distanceToPlayer > enemyData.evadeRadius) StartReturning();
+
+                    if (distanceToPlayer <= _data.attackRange)
+                    {
+                        if (_agent.isOnNavMesh) _agent.ResetPath();
+                        LookAtTarget(_targetPlayer.Transform.position);
+                        TryAttackPlayer();
+                    }
+                    else
+                    {
+                        if (_agent.isOnNavMesh)
+                        {
+                            _agent.SetDestination(_targetPlayer.Transform.position);
+                        }
+                    }
                     break;
 
                 case AIState.Returning:
-                    if (_agent.isOnNavMesh)
+                    if (_agent.isOnNavMesh && !_agent.pathPending)
                     {
-                        if (Vector3.Distance(transform.position, _startPosition) <= _agent.stoppingDistance + 0.5f) ResetToIdle();
+                        if (_agent.remainingDistance <= _agent.stoppingDistance + 0.3f)
+                        {
+                            ResetToIdle();
+                        }
                     }
                     break;
+            }
+        }
+
+        private void HandleDamageTaken(IDamageable attacker)
+        {
+            if (currentState == AIState.Idle && attacker != null && !attacker.IsDead)
+            {
+                _targetPlayer = attacker;
+                StartChasing();
+            }
+        }
+
+        private void TryAttackPlayer()
+        {
+            if (_attackTimer > 0f) return;
+
+            _attackTimer = _data.attackCooldown;
+
+            DamageInfo dmg = new DamageInfo
+            {
+                Attacker = _entity,
+                BaseDamage = _data.baseDamage,
+                DamageType = DamageType.Physical,
+                ScalingAttribute = ScalingAttribute.None,
+                CanCrit = false
+            };
+
+            _targetPlayer.TakeDamage(dmg);
+        }
+
+        private void LookAtTarget(Vector3 targetPos)
+        {
+            Vector3 dir = (targetPos - transform.position).normalized;
+            dir.y = 0f;
+            if (dir != Vector3.zero)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 10f);
             }
         }
 
         private void StartChasing()
         {
             currentState = AIState.Chasing;
-            _agent.speed = enemyData.chaseSpeed;
-            Debug.Log($" {enemyData.enemyName} начал погоню!");
+            _entity.IsImmune = false;
+            _agent.speed = _data.chaseSpeed;
         }
 
         private void StartReturning()
         {
             currentState = AIState.Returning;
-            _agent.speed = enemyData.returnSpeed;
-            _agent.SetDestination(_startPosition);
-            Debug.Log($" {enemyData.enemyName} возвращается домой.");
+            _entity.IsImmune = true;
+            _agent.speed = _data.returnSpeed;
+            if (_agent.isOnNavMesh) _agent.SetDestination(_startPosition);
         }
 
         private void ResetToIdle()
         {
             currentState = AIState.Idle;
-            _agent.ResetPath();
+            if (_agent.isOnNavMesh) _agent.ResetPath();
+            _entity.ResetEntity();
         }
 
-        private void OnDrawGizmosSelected()
+        private void HandleDeath()
         {
-            if (enemyData == null) return;
-
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, enemyData.aggroRadius);
-
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, enemyData.evadeRadius);
+            if (_agent.isOnNavMesh) _agent.ResetPath();
+            _agent.enabled = false;
         }
     }
 }

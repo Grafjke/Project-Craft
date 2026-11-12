@@ -10,13 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c25f6483a279b314b9ccc74c1ba28466, type: 3}
-  m_Name: SO_ZOMBIE_TEST
+  m_Name: Test_Enemy
   m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Shared.EnemyData
-  enemyID: ZombieID
-  enemyName: Zombie
+  enemyID: testEnemy
+  enemyName: Test Enemy
   aggroRadius: 8
-  evadeRadius: 10
-  chaseSpeed: 2.5
+  evadeRadius: 15
+  chaseSpeed: 4.5
   returnSpeed: 3.5
   maxHealth: 100
   baseDamage: 10
+  attackRange: 2
+  attackCooldown: 1.5
+  armor: 0
+  elementalResistance: 0

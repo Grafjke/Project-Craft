@@ -1,3 +1,4 @@
+using ProjectCraft._Server;
 using UnityEngine;
 
 public class ServerTargetController : MonoBehaviour
@@ -18,12 +19,12 @@ public class ServerTargetController : MonoBehaviour
             return;
         }
 
-        
-        if (newTarget.CompareTag("Enemy"))
+        var damageable = newTarget.GetComponentInParent<IDamageable>();
+        if (damageable != null && damageable.Transform.CompareTag("Enemy"))
         {
-            currentTarget = newTarget;
-            Debug.Log($"Цель успешно захвачена: {currentTarget.name}");
-            
+            currentTarget = damageable.Transform;
+            string targetName = (damageable is ServerEnemyEntity enemy) ? enemy.EntityName : currentTarget.name;
+            Debug.Log($"Цель успешно захвачена: {targetName}");
         }
     }
 

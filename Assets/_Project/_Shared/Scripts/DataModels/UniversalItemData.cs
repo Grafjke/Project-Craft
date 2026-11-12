@@ -20,6 +20,16 @@ namespace ProjectCraft._Shared
         public string weaponOrArmorTag;     
         public int requiredLevel = 1;
 
+        [Header("Weapon Combat Settings (If Main_Hand)")]
+        public AttackType attackType = AttackType.Melee;
+        public DamageType damageType = DamageType.Physical;
+        public ScalingAttribute scalingAttribute = ScalingAttribute.Strength;
+        public float baseWeaponDamage = 10f;
+        public float attackRange = 2.0f;
+        public float baseAttackCooldown = 1.5f;
+        public GameObject projectilePrefab;
+
+        
         [Header("Stacking Settings")]
         [Range(1, 99)]
         public int maxStackValue = 1;

@@ -114,6 +114,37 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &3715272799089385106
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8186370409731527925}
+  m_Layer: 0
+  m_Name: ProjectileSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8186370409731527925
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3715272799089385106}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.2, z: 0.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4581109427482222817}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6349225289966411016
 GameObject:
   m_ObjectHideFlags: 0
@@ -126,8 +157,11 @@ GameObject:
   - component: {fileID: 1851071812537839010}
   - component: {fileID: 3841082561925314589}
   - component: {fileID: 2560915760025840126}
-  - component: {fileID: -844036768831754338}
   - component: {fileID: 2465075815719530655}
+  - component: {fileID: 5798122838269242875}
+  - component: {fileID: 7216877757102338703}
+  - component: {fileID: 1227202379997816633}
+  - component: {fileID: 292204201093642938}
   m_Layer: 0
   m_Name: Player_Server
   m_TagString: Untagged
@@ -149,6 +183,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5094281939127767711}
+  - {fileID: 8186370409731527925}
+  - {fileID: 5080027009408443168}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!195 &1851071812537839010
@@ -198,25 +234,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClientInputController
   serverMovement: {fileID: 3841082561925314589}
-  serverTarget: {fileID: 0}
---- !u!114 &-844036768831754338
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6349225289966411016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 342b5c7f9bab2424ea9e123ca3868858, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ServerPlayerEntity
-  maxHealth: 100
-  currentHealth: 100
-  strength: 10
-  intellect: 10
-  armor: 0
-  inventorySlots: []
+  serverTarget: {fileID: 1227202379997816633}
+  interactKey: 101
+  npcLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &2465075815719530655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,9 +251,105 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 342b5c7f9bab2424ea9e123ca3868858, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ServerPlayerEntity
-  maxHealth: 100
-  currentHealth: 100
-  strength: 10
-  intellect: 10
-  armor: 0
-  inventorySlots: []
+  defaultProjectileSpawnPoint: {fileID: 8186370409731527925}
+  hitTargetPoint: {fileID: 5080027009408443168}
+--- !u!54 &5798122838269242875
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6349225289966411016}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &7216877757102338703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6349225289966411016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b84a856465a97134685ef7ca369a76d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Server.ServerCraftSystem
+--- !u!114 &1227202379997816633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6349225289966411016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4e93e952d9e8604bac7672c222a04e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ServerTargetController
+  currentTarget: {fileID: 0}
+  maxTargetDistance: 25
+--- !u!114 &292204201093642938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6349225289966411016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f56a611bd411ad74290872f022279414, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Server.ServerCombatController
+  unarmedDamage: 5
+  unarmedRange: 2
+  unarmedCooldown: 1.2
+  defaultRangedProjectilePrefab: {fileID: 0}
+--- !u!1 &7417654838335315908
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5080027009408443168}
+  m_Layer: 0
+  m_Name: HitTargetPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5080027009408443168
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7417654838335315908}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4581109427482222817}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

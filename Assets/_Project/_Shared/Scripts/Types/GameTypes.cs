@@ -71,4 +71,25 @@ namespace ProjectCraft._Shared
         Craft,
         Altar
     }
+    public enum DamageType
+    {
+        Physical,
+        Fire,
+        Lightning,
+        Shadow
+    }
+
+    public enum AttackType
+    {
+        Melee,
+        Ranged
+    }
+
+    public enum ScalingAttribute
+    {
+        None,
+        Strength,
+        Dexterity,
+        Intelligence
+    }
 }

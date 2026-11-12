@@ -662,6 +662,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4581109427482222817, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
   m_PrefabInstance: {fileID: 2796112198567349813}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &751810751 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 292204201093642938, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
+  m_PrefabInstance: {fileID: 2796112198567349813}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f56a611bd411ad74290872f022279414, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Server.ServerCombatController
 --- !u!1 &788321353
 GameObject:
   m_ObjectHideFlags: 0
@@ -1032,50 +1043,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI_Bootstrapper
   canvasPrefab: {fileID: 5120460282180526861, guid: b7e43950c968ab940aab2225fea659d9, type: 3}
   eventSystemPrefab: {fileID: 2557528338990750322, guid: 93974a55524cdaa4495931ab619d679f, type: 3}
---- !u!1 &1805560462 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6349225289966411016, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-  m_PrefabInstance: {fileID: 2796112198567349813}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &1813699460
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1805560462}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &1813699465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1805560462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b84a856465a97134685ef7ca369a76d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectCraft._Server.ServerCraftSystem
 --- !u!1001 &2796112198567349813
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1084,10 +1051,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2335548670679483740, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-      propertyPath: m_CastShadows
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 2560915760025840126, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
+      propertyPath: serverCombat
+      value: 
+      objectReference: {fileID: 751810751}
     - target: {fileID: 4581109427482222817, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.46
@@ -1135,13 +1102,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6349225289966411016, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1813699460}
-    - targetCorrespondingSourceObject: {fileID: 6349225289966411016, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1813699465}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 990485a4bad25734794e60c1f50fb05a, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -32,6 +32,30 @@ public class ServerMovementController : MonoBehaviour
             Debug.LogWarning($"[Movement] На сцене {scene.name} не найдена точка спавна с тегом 'SpawnPoint'!");
         }
     }
+
+    public void OnClientMovementRequest(Vector3 targetPosition)
+    {
+        if (_isStunned) return;
+
+        _agent.stoppingDistance = 0.1f;
+        _agent.SetDestination(targetPosition);
+    }
+    public void MoveToTarget(Vector3 targetPosition, float stopDistance)
+    {
+        if (_isStunned || !_agent.isOnNavMesh) return;
+
+        _agent.stoppingDistance = Mathf.Max(0.1f, stopDistance);
+        _agent.SetDestination(targetPosition);
+    }
+
+    public void StopMovement()
+    {
+        if (_agent != null && _agent.isOnNavMesh && _agent.hasPath)
+        {
+            _agent.ResetPath();
+        }
+    }
+
     public void TeleportToPosition(Vector3 newPosition)
     {
         if (_agent == null) _agent = GetComponent<NavMeshAgent>();
@@ -45,16 +69,6 @@ public class ServerMovementController : MonoBehaviour
     {
         _agent = GetComponent<NavMeshAgent>();
     }
-
-    
-    public void OnClientMovementRequest(Vector3 targetPosition)
-    {
-      
-        if (_isStunned) return;
-
-        _agent.SetDestination(targetPosition);
-    }
-
     
     public void SetStun(bool state)
     {

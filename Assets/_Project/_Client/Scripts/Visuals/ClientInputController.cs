@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using static Unity.Multiplayer.Editor.EditorMultiplayerRolesManager.AutomaticSelection;
 
 public class ClientInputController : MonoBehaviour
 {
@@ -12,6 +11,7 @@ public class ClientInputController : MonoBehaviour
     [Header("Server System References")]
     [SerializeField] private ServerMovementController serverMovement;
     [SerializeField] private ServerTargetController serverTarget;
+    [SerializeField] private ServerCombatController serverCombat;
 
     [Header("Interaction Input")]
     [SerializeField] private KeyCode interactKey = KeyCode.E;
@@ -55,6 +55,20 @@ public class ClientInputController : MonoBehaviour
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             TrySelectTargetUnderCursor();
+        }
+        
+        if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            if (serverCombat != null)
+            {
+                serverCombat.StartAutoAttackAndChase();
+            }
+        }
+
+        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            if (serverTarget != null) serverTarget.ClearTarget();
+            if (serverCombat != null) serverCombat.StopAutoAttack();
         }
     }
     private void TryInteractWithNearestNPC()
@@ -109,6 +123,7 @@ public class ClientInputController : MonoBehaviour
                 serverMovement.OnClientMovementRequest(hit.point);
             }
         }
+        if (serverCombat != null) serverCombat.OnManualMovementCommand();
     }
 
     private void TrySelectTargetUnderCursor()
@@ -127,9 +142,10 @@ public class ClientInputController : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
 
-            if (hit.transform.CompareTag("Enemy"))
+            var damageable = hit.transform.GetComponentInParent<IDamageable>();
+            if (damageable != null && damageable.Transform.CompareTag("Enemy"))
             {
-                if (serverTarget != null) serverTarget.SetTarget(hit.transform);
+                if (serverTarget != null) serverTarget.SetTarget(damageable.Transform);
             }
             else
             {
